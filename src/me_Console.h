@@ -13,9 +13,9 @@
 namespace me_Console
 {
   /*
-    Currently console is values printer to Serial.
+    Currently "console" is values printer to Serial.
 
-    There are two output classes: "Print" and "Write".
+    There are two modes of output: "Print" and "Write".
 
     Assumption of "Print" is that it writes delimited value.
     So it keeps granularity. And that value can be read
@@ -36,9 +36,9 @@ namespace me_Console
          0   | 000     | 00000   | +000    | +00000
          42  | 042     | 00042   | +042    | +00042
 
-       Value | Print() | Write()
-       ------+---------+---------
-       Hello | Hello\n | Hello
+       Value | Print()   | Write()
+       ------+-----------+---------
+       Hello | \nHello\n | Hello
   */
 
   class TConsole
