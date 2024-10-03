@@ -10,7 +10,7 @@ Experimental library for serial console output.
 Well, it's not too bad.
 
 I love conception that Print() prints something standalone.
-Integers surrounded by spaces, strings occupies whole lines.
+Integer surrounded by spaces, string occupies whole line.
 Plus obligatory sign for signed integers. +000, yeah.
 
 This class is not usable if you want to embed number like in "(000)".
