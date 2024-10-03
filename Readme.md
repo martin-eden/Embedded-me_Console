@@ -47,8 +47,8 @@ millis(): 0000000029 ms.
 * [My other embedded C++ libraries][Embedded]
 * [My other repositories][Repos]
 
-[Example]: examples/me_ReadInteger/me_ReadInteger.ino
-[Interface]: src/me_ReadInteger.h
-[Implementation]: src/me_ReadInteger.cpp
+[Example]: examples/me_Console/me_Console.ino
+[Interface]: src/me_Console.h
+[Implementation]: src/me_Console.cpp
 [Embedded]: https://github.com/martin-eden/Embedded_Crafts/tree/master/Parts
 [Repos]: https://github.com/martin-eden/contents
