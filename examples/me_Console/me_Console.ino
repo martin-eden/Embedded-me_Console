@@ -2,8 +2,8 @@
 
 /*
   Author: Martin Eden
-  Status: sketching
-  Last mod.: 2024-10-03
+  Status: sketched
+  Last mod.: 2024-10-06
 */
 
 #include <me_Console.h>
@@ -28,7 +28,16 @@ void RunTest()
 
   Console.Init(me_UartSpeeds::Arduino_Normal_Bps);
 
-  Console.Print("[me_Console] Okay, we are here.");
+  Console.Print("[me_Console] demo.");
+  Console.Newline();
+
+  Console.Indent();
+
+  Console.Print("We'll show how values are represented for base types.");
+  Console.Print("We'll use indentation too.");
+
+  Console.Indent();
+  Console.Line();
 
   {
     TUint_1 Value;
@@ -145,9 +154,15 @@ void RunTest()
     Console.Newline();
   }
 
-  Console.Print("[me_Console] Done.");
+  Console.Line();
+  Console.Unindent();
+
+  Console.Unindent();
+
+  Console.Print("[me_Console] That's all folks!");
 }
 
 /*
   2024-10-03
+  2024-10-06
 */
