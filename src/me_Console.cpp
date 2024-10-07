@@ -3,16 +3,22 @@
 /*
   Author: Martin Eden
   Status: sketching
-  Last mod.: 2024-10-03
+  Last mod.: 2024-10-06
 */
 
 #include "me_Console.h"
 
-#include <HardwareSerial.h>
+#include <HardwareSerial.h> // "Serial" for Init()
 #include <me_BaseTypes.h>
-#include <me_InstallStandardStreams.h>
+#include <me_InstallStandardStreams.h> // make printf() work
+#include <stdio.h> // printf()
+#include <me_MemorySegment.h> // TMemorySegment
+#include <me_String.h> // formatting to TMemorySegment
 
 using namespace me_Console;
+
+using
+  me_MemorySegment::TMemorySegment;
 
 /*
   Setup console with serial speed
@@ -25,8 +31,39 @@ TBool TConsole::Init(
   InstallStandardStreams();
 
   NeedDelimiter = false;
+  LineIsEmpty = true;
+  IndentLev = 0;
 
   return true;
+}
+
+// Max byte value. I need to move such lame constants somewhere
+const TUint_1 Max_Uint_1 = 0xFF;
+
+/*
+  Increase indent
+
+  Indent is increased up to certain hardcoded limit.
+*/
+void TConsole::Indent()
+{
+  if (IndentLev == Max_Uint_1)
+    return;
+
+  ++IndentLev;
+}
+
+/*
+  Decrease indent
+
+  Zero indent is not decreasing.
+*/
+void TConsole::Unindent()
+{
+  if (IndentLev == 0)
+    return;
+
+  --IndentLev;
 }
 
 /*
@@ -37,6 +74,7 @@ void TConsole::Newline()
   printf("\n");
 
   NeedDelimiter = false;
+  LineIsEmpty = true;
 }
 
 /*
@@ -47,15 +85,26 @@ void TConsole::Space()
   printf(" ");
 
   NeedDelimiter = false;
+  LineIsEmpty = false;
 }
 
 /*
-  [Internal] Print newline if needed.
+  [Internal] If needed, print newline and indentation
 */
 void TConsole::ApplyStringNeeds()
 {
-  if (NeedDelimiter)
-    Newline();
+  if (LineIsEmpty)
+  {
+    Freetown::PrintIndent(IndentLev);
+    LineIsEmpty = false;
+    NeedDelimiter = false;
+  }
+
+  if (!NeedDelimiter)
+    return;
+
+  Newline();
+  Freetown::PrintIndent(IndentLev);
 }
 
 /*
@@ -63,8 +112,61 @@ void TConsole::ApplyStringNeeds()
 */
 void TConsole::ApplyNumberNeeds()
 {
-  if (NeedDelimiter)
-    Space();
+  if (LineIsEmpty)
+  {
+    Freetown::PrintIndent(IndentLev);
+    LineIsEmpty = false;
+    NeedDelimiter = false;
+  }
+
+  if (!NeedDelimiter)
+    return;
+
+  Space();
+}
+
+/*
+  Write memory segment contents
+*/
+void TConsole::Write(
+  TMemorySegment MemSeg
+)
+{
+  // Binary chunk may start from space
+  ApplyNumberNeeds();
+
+  Freetown::PrintSeg(MemSeg);
+
+  // Pend delimiter for next item
+  NeedDelimiter = true;
+}
+
+/*
+  Write string binary contents
+*/
+void TConsole::Write(
+  const TChar * String
+)
+{
+  ApplyNumberNeeds();
+
+  printf("%s", String);
+
+  NeedDelimiter = true;
+}
+
+/*
+  Print memory segment
+*/
+void TConsole::Print(
+  TMemorySegment MemSeg
+)
+{
+  ApplyStringNeeds();
+
+  Freetown::PrintSeg(MemSeg);
+
+  Newline();
 }
 
 /*
@@ -83,23 +185,13 @@ void TConsole::Print(
 }
 
 /*
-  Write string binary contents
+  Print separation line
+
+  Current implementation prints "--".
 */
-void TConsole::Write(
-  const TChar * String
-)
+void TConsole::Line()
 {
-  // Binary chunk may start from space
-  ApplyNumberNeeds();
-
-  // We're not writing length. Parser must know size of chunk.
-  printf("%s", String);
-
-  /*
-    I had temptation to adjust need according to last char in chunk.
-    Bad idea. Parser will have to track last byte of chunk in that case.
-  */
-  NeedDelimiter = true;
+  Print("--");
 }
 
 /*
@@ -111,7 +203,11 @@ void TConsole::Print(
 {
   ApplyNumberNeeds();
 
-  printf("%03u", Value);
+  me_String::TString Str;
+
+  Str.Format("%03u", Value);
+
+  Write(Str.GetData());
 
   NeedDelimiter = true;
 }
@@ -125,7 +221,11 @@ void TConsole::Print(
 {
   ApplyNumberNeeds();
 
-  printf("%05u", Value);
+  me_String::TString Str;
+
+  Str.Format("%05u", Value);
+
+  Write(Str.GetData());
 
   NeedDelimiter = true;
 }
@@ -139,7 +239,11 @@ void TConsole::Print(
 {
   ApplyNumberNeeds();
 
-  printf("%010lu", Value);
+  me_String::TString Str;
+
+  Str.Format("%010lu", Value);
+
+  Write(Str.GetData());
 
   NeedDelimiter = true;
 }
@@ -153,10 +257,14 @@ void TConsole::Print(
 {
   ApplyNumberNeeds();
 
+  me_String::TString Str;
+
   if (Value < 0)
-    printf("%03d", Value);
-  if (Value >= 0)
-    printf("+%03d", Value);
+    Str.Format("%04d", Value);
+  else
+    Str.Format("+%03d", Value);
+
+  Write(Str.GetData());
 
   NeedDelimiter = true;
 }
@@ -170,10 +278,14 @@ void TConsole::Print(
 {
   ApplyNumberNeeds();
 
+  me_String::TString Str;
+
   if (Value < 0)
-    printf("%06d", Value);
-  if (Value >= 0)
-    printf("+%05d", Value);
+    Str.Format("%06d", Value);
+  else
+    Str.Format("+%05d", Value);
+
+  Write(Str.GetData());
 
   NeedDelimiter = true;
 }
@@ -187,14 +299,46 @@ void TConsole::Print(
 {
   ApplyNumberNeeds();
 
+  me_String::TString Str;
+
+  // "%011ld" - format strings are so readable!! I'm getting %011ld
   if (Value < 0)
-    printf("%011ld", Value);
-  if (Value >= 0)
-    printf("+%010ld", Value);
+    Str.Format("%011ld", Value);
+  else
+    Str.Format("+%010ld", Value);
+
+  Write(Str.GetData());
 
   NeedDelimiter = true;
 }
 
+// ( Freetown
+
+/*
+  Print uncooked contents of memory segment to stdout
+*/
+void me_Console::Freetown::PrintSeg(
+  me_MemorySegment::TMemorySegment Data
+)
+{
+  // First implementation was in [me_ParseInteger] demo
+  fwrite(Data.Bytes, Data.Size, 1, stdout);
+}
+
+/*
+  Print indentation
+*/
+void me_Console::Freetown::PrintIndent(
+  TUint_1 IndentLev
+)
+{
+  for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
+    printf("  ");
+}
+
+// ) Freetown
+
 /*
   2024-10-03
+  2024-10-06
 */
