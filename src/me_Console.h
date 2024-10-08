@@ -16,30 +16,43 @@ namespace me_Console
   /*
     Currently "console" is values printer to Serial.
 
-    There are two modes of output: "Print" and "Write".
+    There are several design ideas.
 
-    Assumption of "Print" is that it writes delimited value.
-    So it keeps granularity. And that value can be read
-    back from stream someday.
+    First idea is to keep granularity between values.
+    So result from "Print(1); Print(2);" should not be the same
+    as from "Print(12);".
 
-    For example Print(TUint_1 42) may produce "TUint_1(42)".
-    Or " 042 ". But output should be distinguishable from
-    Print(TUint_2 42). Which in our example may produce
-    "TUint_2(42)" or " 00042 ".
+    Second idea is raising level of abstraction for caller.
+    As a user, I don't want to care how exactly number is formatted
+    when printed. I just want to call "Print("millis");
+    Print(millis());" and see parseable result.
 
-    "Write" writes in binary. No values granularity. Result
-    is byte stream.
+      Also I want inherent indentation. So when "foo()" does
+      "Print("foo:"); Indent(); baz(); Unindent();" and
+      "baz()" does "Print("baz!");", result is like
 
-    This implementation implements Print() for base types.
+        foo:
+          baz!
 
-       Value | TUint_1 | TUint_2 | TSint_1 | TSint_2
-      -------+---------+---------+---------+---------
-         0   | 000     | 00000   | +000    | +00000
-         42  | 042     | 00042   | +042    | +00042
+    Problem is strings. Should "Print()" for strings produce standalone
+    line or print on current line?
 
-       Value | Print()   | Write()
-       ------+-----------+---------
-       Hello | \nHello\n | Hello
+    Current approach is that Print() for strings prints on standalone
+    line and Write() prints on current line. For numbers Print()
+    prints on current line. And there is no Write() for numbers.
+    That's ugly and unintuitive.
+
+    Float numbers are not supported, no need (yet?).
+
+    Integer numbers are represented in decimal ASCII with leading
+    zeroes. Signed integers always have "-" or "+" before value.
+    Zero of signed type is represented with "+" sign.
+
+    So Print(42) may produce "042", "00042", "0000000042", "+042", ...
+
+    This allows us to parse integers back to original types.
+    Also fixed-length numbers are neat when you need to estimate
+    length of list of numbers.
   */
 
   class TConsole
@@ -67,7 +80,7 @@ namespace me_Console
 
       // ) Write
 
-      // ( Print string on newline with newline
+      // ( Print data on standalone line
 
       // Data is memory segment
       void Print(me_MemorySegment::TMemorySegment Data);
@@ -107,20 +120,20 @@ namespace me_Console
         Internal mechanics to avoid double spaces and heading/trailing
         spaces in output.
 
-        Need to emit Print()-specific delimiter (newline or space)
+        Flag to emit Print()-specific delimiter (newline or space)
       */
       TBool NeedDelimiter;
-
-      // Indentation level
-      TUint_1 IndentLev;
 
       // Flag that current line is empty
       TBool LineIsEmpty;
 
-      // Prints space before number if needed
+      // Indentation level
+      TUint_1 IndentLev;
+
+      // Print space before number if needed
       void ApplyNumberNeeds();
 
-      // Prints newline before string if needed
+      // Print newline before string if needed
       void ApplyStringNeeds();
   };
 
@@ -132,10 +145,10 @@ namespace me_Console
 }
 
 /*
-  Exported class instance for global use
+  Exported class instance for shared use
 
-  Because you want to keep indentation in call chain of
-  functions that are using this module.
+  Because you want to keep indentation in call chain of functions
+  that are using this module.
 
   Assigned in "me_Console.cpp".
 */
