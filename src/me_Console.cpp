@@ -3,17 +3,18 @@
 /*
   Author: Martin Eden
   Status: sketching
-  Last mod.: 2024-10-06
+  Last mod.: 2024-10-08
 */
 
 #include "me_Console.h"
 
-#include <HardwareSerial.h> // "Serial" for Init()
 #include <me_BaseTypes.h>
 #include <me_InstallStandardStreams.h> // make printf() work
-#include <stdio.h> // printf()
 #include <me_MemorySegment.h> // TMemorySegment
 #include <me_String.h> // formatting to TMemorySegment
+
+#include <HardwareSerial.h> // "Serial" for Init()
+#include <stdio.h> // printf()
 
 using namespace me_Console;
 
@@ -135,7 +136,7 @@ void TConsole::Write(
   // Binary chunk may start from space
   ApplyNumberNeeds();
 
-  Freetown::PrintSeg(MemSeg);
+  me_MemorySegment::Freetown::Print(MemSeg);
 
   // Pend delimiter for next item
   NeedDelimiter = true;
@@ -164,7 +165,7 @@ void TConsole::Print(
 {
   ApplyStringNeeds();
 
-  Freetown::PrintSeg(MemSeg);
+  me_MemorySegment::Freetown::Print(MemSeg);
 
   Newline();
 }
@@ -315,17 +316,6 @@ void TConsole::Print(
 // ( Freetown
 
 /*
-  Print uncooked contents of memory segment to stdout
-*/
-void me_Console::Freetown::PrintSeg(
-  me_MemorySegment::TMemorySegment Data
-)
-{
-  // First implementation was in [me_ParseInteger] demo
-  fwrite(Data.Bytes, Data.Size, 1, stdout);
-}
-
-/*
   Print indentation
 */
 void me_Console::Freetown::PrintIndent(
@@ -339,6 +329,12 @@ void me_Console::Freetown::PrintIndent(
 // ) Freetown
 
 /*
+  Assign instance to shared "extern" global
+*/
+me_Console::TConsole Console;
+
+/*
   2024-10-03
   2024-10-06
+  2024-10-08
 */

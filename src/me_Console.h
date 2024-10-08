@@ -3,7 +3,7 @@
 /*
   Author: Martin Eden
   Status: sketched
-  Last mod.: 2024-10-06
+  Last mod.: 2024-10-08
 */
 
 #pragma once
@@ -23,7 +23,7 @@ namespace me_Console
     back from stream someday.
 
     For example Print(TUint_1 42) may produce "TUint_1(42)".
-    Or " 42 ". But output should be distinguishable from
+    Or " 042 ". But output should be distinguishable from
     Print(TUint_2 42). Which in our example may produce
     "TUint_2(42)" or " 00042 ".
 
@@ -122,20 +122,27 @@ namespace me_Console
 
       // Prints newline before string if needed
       void ApplyStringNeeds();
-
   };
 
   namespace Freetown
   {
-    // Print uncooked contents of memory segment to stdout
-    void PrintSeg(me_MemorySegment::TMemorySegment Data);
-
     // Print indentation
     void PrintIndent(TUint_1 IndentLev);
   }
 }
 
 /*
+  Exported class instance for global use
+
+  Because you want to keep indentation in call chain of
+  functions that are using this module.
+
+  Assigned in "me_Console.cpp".
+*/
+extern me_Console::TConsole Console;
+
+/*
   2024-10-03
   2024-10-06
+  2024-10-08
 */
