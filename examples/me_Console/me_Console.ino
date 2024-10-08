@@ -40,108 +40,66 @@ void RunTest()
   Console.Indent();
 
   {
-    TUint_1 Value;
-
     Console.Write("TUint_1 ( ");
 
-    Value = 0;
-    Console.Print(Value);
-
-    Value = 0x7F;
-    Console.Print(Value);
-
-    Value = 0xFF;
-    Console.Print(Value);
+    Console.Print((TUint_1) 0x00);
+    Console.Print((TUint_1) 0x7F);
+    Console.Print((TUint_1) 0xFF);
 
     Console.Write(" )");
     Console.Newline();
   }
 
   {
-    TSint_1 Value;
-
     Console.Write("TSint_1 ( ");
 
-    Value = 0x80;
-    Console.Print(Value);
-
-    Value = 0;
-    Console.Print(Value);
-
-    Value = 0x7F;
-    Console.Print(Value);
+    Console.Print((TSint_1) 0x80);
+    Console.Print((TSint_1) 0x00);
+    Console.Print((TSint_1) 0x7F);
 
     Console.Write(" )");
     Console.Newline();
   }
 
   {
-    TUint_2 Value;
-
     Console.Write("TUint_2 ( ");
 
-    Value = 0;
-    Console.Print(Value);
-
-    Value = 0x7FFF;
-    Console.Print(Value);
-
-    Value = 0xFFFF;
-    Console.Print(Value);
+    Console.Print((TUint_2) 0x0000);
+    Console.Print((TUint_2) 0x7FFF);
+    Console.Print((TUint_2) 0xFFFF);
 
     Console.Write(" )");
     Console.Newline();
   }
 
   {
-    TSint_2 Value;
-
     Console.Write("TSint_2 ( ");
 
-    Value = 0x8000;
-    Console.Print(Value);
-
-    Value = 0;
-    Console.Print(Value);
-
-    Value = 0x7FFF;
-    Console.Print(Value);
+    Console.Print((TSint_2) 0x8000);
+    Console.Print((TSint_2) 0x0000);
+    Console.Print((TSint_2) 0x7FFF);
 
     Console.Write(" )");
     Console.Newline();
   }
 
   {
-    TUint_4 Value;
-
     Console.Write("TUint_4 ( ");
 
-    Value = 0;
-    Console.Print(Value);
-
-    Value = 0x7FFFFFFF;
-    Console.Print(Value);
-
-    Value = 0xFFFFFFFF;
-    Console.Print(Value);
+    Console.Print((TUint_4) 0x00000000);
+    Console.Print((TUint_4) 0x7FFFFFFF);
+    Console.Print((TUint_4) 0xFFFFFFFF);
 
     Console.Write(" )");
     Console.Newline();
   }
 
   {
-    TSint_4 Value;
-
     Console.Write("TSint_4 ( ");
 
-    Value = 0x80000000;
-    Console.Print(Value);
-
-    Value = 0;
-    Console.Print(Value);
-
-    Value = 0x7FFFFFFF;
-    Console.Print(Value);
+    Console.Print((TSint_4) 0x80000000);
+    Console.Print((TSint_4) 0x00000000);
+    Console.Print((TSint_4) 0x7FFFFFFF);
 
     Console.Write(" )");
     Console.Newline();
