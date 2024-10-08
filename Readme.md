@@ -1,38 +1,40 @@
 ## What
 
-(2024-10..)
+(2024-10)
 
 Experimental library for serial console output.
 
 
 ## Details
 
-Well, it's not too bad.
+Idea is to have `Print()` for base types. For integers, for
+memory segment and for ASCIIZ. Plus traditional `Write()` for
+memory segment to do raw output.
 
-I love conception that Print() prints something standalone.
-Integer surrounded by spaces, string occupies whole line.
-Plus obligatory sign for signed integers. +000, yeah.
+Class provides indentation and items separation. Integers
+are separated by spaces, strings by newlines.
 
-This class is not usable if you want to embed number like in "(000)".
-We'll see soon how much places do really need printf() flexibility.
-
-And it ignores floats. Floats are pain in the ass on AVR. Even printf()
-does not support them. Only Serial.print() accepts them. But there's
-no design and code is cursed.
-
+Integers are converted to strings by [`me_String`][me_String] library.
+You'd better love fixed-length representation and `+000` for
+zero in signed byte.
 
 ## Sample output
 
 ```
-[me_Console] Okay, we are here.
-TUint_1( 000 127 255 )
-TSint_1( -128 +000 +127 )
-TUint_2( 00000 32767 65535 )
-TSint_2( -32768 +00000 +32767 )
-TUint_4( 0000000000 2147483647 4294967295 )
-TSint_4( -2147483648 +0000000000 +2147483647 )
-millis(): 0000000029 ms.
-[me_Console] Done.
+[me_Console] demo.
+--
+  We'll show how values are represented for base types.
+  We'll use indentation too.
+  --
+    TUint_1 ( 000 127 255 )
+    TSint_1 ( -128 +000 +127 )
+    TUint_2 ( 00000 32767 65535 )
+    TSint_2 ( -32768 +00000 +32767 )
+    TUint_4 ( 0000000000 2147483647 4294967295 )
+    TSint_4 ( -2147483648 +0000000000 +2147483647 )
+  --
+--
+[me_Console] That's all folks!
 ```
 
 ## Code
@@ -50,5 +52,8 @@ millis(): 0000000029 ms.
 [Example]: examples/me_Console/me_Console.ino
 [Interface]: src/me_Console.h
 [Implementation]: src/me_Console.cpp
+
+[me_String]: https://github.com/martin-eden/Embedded-me_String
+
 [Embedded]: https://github.com/martin-eden/Embedded_Crafts/tree/master/Parts
 [Repos]: https://github.com/martin-eden/contents
