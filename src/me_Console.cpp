@@ -31,11 +31,28 @@ TBool TConsole::Init(
   Serial.begin(SerialSpeed);
   InstallStandardStreams();
 
-  NeedDelimiter = false;
-  LineIsEmpty = true;
+  LastItemType = TItemType::Chunk;
   IndentLev = 0;
 
   return true;
+}
+
+/*
+  Flushing destructor
+*/
+TConsole::~TConsole()
+{
+  Flush();
+
+  Serial.end();
+}
+
+/*
+  Write pending delimiter for last item
+*/
+void TConsole::Flush()
+{
+  PrintDelimiterBefore(TItemType::Chunk);
 }
 
 // Max byte value. I need to move such lame constants somewhere
@@ -68,62 +85,26 @@ void TConsole::Unindent()
 }
 
 /*
-  Print newline
+  [Internal] Print delimiter and maybe indent
 */
-void TConsole::Newline()
+void TConsole::PrintDelimiterBefore(
+  TItemType CurItemType
+)
 {
-  printf("\n");
+  // Print closing delimiter for previous item
+  Freetown::PrintDelimiter(LastItemType, CurItemType);
 
-  NeedDelimiter = false;
-  LineIsEmpty = true;
-}
-
-/*
-  Print space
-*/
-void TConsole::Space()
-{
-  printf(" ");
-
-  NeedDelimiter = false;
-  LineIsEmpty = false;
-}
-
-/*
-  [Internal] If needed, print newline and indentation
-*/
-void TConsole::ApplyStringNeeds()
-{
-  if (LineIsEmpty)
+  // New lines are starting with indent
+  if (
+    (LastItemType == TItemType::Line) ||
+    (CurItemType == TItemType::Line)
+  )
   {
     Freetown::PrintIndent(IndentLev);
-    LineIsEmpty = false;
-    NeedDelimiter = false;
   }
 
-  if (!NeedDelimiter)
-    return;
-
-  Newline();
-  Freetown::PrintIndent(IndentLev);
-}
-
-/*
-  [Internal] Print space if needed.
-*/
-void TConsole::ApplyNumberNeeds()
-{
-  if (LineIsEmpty)
-  {
-    Freetown::PrintIndent(IndentLev);
-    LineIsEmpty = false;
-    NeedDelimiter = false;
-  }
-
-  if (!NeedDelimiter)
-    return;
-
-  Space();
+  // Set last item type to this one
+  LastItemType = CurItemType;
 }
 
 /*
@@ -133,27 +114,19 @@ void TConsole::Write(
   TMemorySegment MemSeg
 )
 {
-  // Binary chunk may start from space
-  ApplyNumberNeeds();
+  PrintDelimiterBefore(TItemType::Chunk);
 
   me_MemorySegment::Freetown::Print(MemSeg);
-
-  // Pend delimiter for next item
-  NeedDelimiter = true;
 }
 
 /*
   Write string binary contents
 */
 void TConsole::Write(
-  const TChar * String
+  const TChar * Asciiz
 )
 {
-  ApplyNumberNeeds();
-
-  printf("%s", String);
-
-  NeedDelimiter = true;
+  Write(me_MemorySegment::Freetown::FromAsciiz(Asciiz));
 }
 
 /*
@@ -163,26 +136,27 @@ void TConsole::Print(
   TMemorySegment MemSeg
 )
 {
-  ApplyStringNeeds();
+  PrintDelimiterBefore(TItemType::Line);
 
   me_MemorySegment::Freetown::Print(MemSeg);
-
-  Newline();
 }
 
 /*
   Print string on new line and newline
 */
 void TConsole::Print(
-  const TChar * String
+  const TChar * Asciiz
 )
 {
-  ApplyStringNeeds();
+  Print(me_MemorySegment::Freetown::FromAsciiz(Asciiz));
+}
 
-  printf("%s", String);
-
-  // Print() of string always produces newline
-  Newline();
+/*
+  Print newline next time
+*/
+void TConsole::Newline()
+{
+  LastItemType = TItemType::Line;
 }
 
 /*
@@ -202,15 +176,11 @@ void TConsole::Print(
   TUint_1 Value
 )
 {
-  ApplyNumberNeeds();
+  PrintDelimiterBefore(TItemType::Number);
 
   me_String::TString Str;
-
-  Str.Format("%03u", Value);
-
-  Write(Str.GetData());
-
-  NeedDelimiter = true;
+  Str.Format(Value);
+  me_MemorySegment::Freetown::Print(Str.GetData());
 }
 
 /*
@@ -220,15 +190,15 @@ void TConsole::Print(
   TUint_2 Value
 )
 {
-  ApplyNumberNeeds();
+  /*
+    Same code, but Format() is overridden and so different
+    function is called.
+  */
+  PrintDelimiterBefore(TItemType::Number);
 
   me_String::TString Str;
-
-  Str.Format("%05u", Value);
-
-  Write(Str.GetData());
-
-  NeedDelimiter = true;
+  Str.Format(Value);
+  me_MemorySegment::Freetown::Print(Str.GetData());
 }
 
 /*
@@ -238,15 +208,11 @@ void TConsole::Print(
   TUint_4 Value
 )
 {
-  ApplyNumberNeeds();
+  PrintDelimiterBefore(TItemType::Number);
 
   me_String::TString Str;
-
-  Str.Format("%010lu", Value);
-
-  Write(Str.GetData());
-
-  NeedDelimiter = true;
+  Str.Format(Value);
+  me_MemorySegment::Freetown::Print(Str.GetData());
 }
 
 /*
@@ -256,18 +222,11 @@ void TConsole::Print(
   TSint_1 Value
 )
 {
-  ApplyNumberNeeds();
+  PrintDelimiterBefore(TItemType::Number);
 
   me_String::TString Str;
-
-  if (Value < 0)
-    Str.Format("%04d", Value);
-  else
-    Str.Format("+%03d", Value);
-
-  Write(Str.GetData());
-
-  NeedDelimiter = true;
+  Str.Format(Value);
+  me_MemorySegment::Freetown::Print(Str.GetData());
 }
 
 /*
@@ -277,18 +236,11 @@ void TConsole::Print(
   TSint_2 Value
 )
 {
-  ApplyNumberNeeds();
+  PrintDelimiterBefore(TItemType::Number);
 
   me_String::TString Str;
-
-  if (Value < 0)
-    Str.Format("%06d", Value);
-  else
-    Str.Format("+%05d", Value);
-
-  Write(Str.GetData());
-
-  NeedDelimiter = true;
+  Str.Format(Value);
+  me_MemorySegment::Freetown::Print(Str.GetData());
 }
 
 /*
@@ -298,19 +250,11 @@ void TConsole::Print(
   TSint_4 Value
 )
 {
-  ApplyNumberNeeds();
+  PrintDelimiterBefore(TItemType::Number);
 
   me_String::TString Str;
-
-  // "%011ld" - format strings are so readable!! I'm getting %011ld
-  if (Value < 0)
-    Str.Format("%011ld", Value);
-  else
-    Str.Format("+%010ld", Value);
-
-  Write(Str.GetData());
-
-  NeedDelimiter = true;
+  Str.Format(Value);
+  me_MemorySegment::Freetown::Print(Str.GetData());
 }
 
 // ( Freetown
@@ -324,6 +268,62 @@ void me_Console::Freetown::PrintIndent(
 {
   for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
     printf("  ");
+}
+
+/*
+  Print delimiter
+
+  Delimiter depends of previous and current item types.
+
+   2nd > Chunk Line Number
+  1st
+  Chunk  ""    \n    ""
+  Line   \n    \n    \n
+  Number ""    \n    " "
+*/
+void me_Console::Freetown::PrintDelimiter(
+  TItemType PrevItemType,
+  TItemType CurItemType
+)
+{
+  if (PrevItemType == Chunk)
+  {
+    // No delimiters between chunks
+    if (CurItemType == Chunk)
+      ;
+    // Heading newline
+    else if (CurItemType == Line)
+      printf("\n");
+    // No delimiter between chunk and number
+    else if (CurItemType == Number)
+    {
+      ;
+    }
+  }
+  else if (PrevItemType == Line)
+  {
+    // Tail newline
+    if (CurItemType == Chunk)
+      printf("\n");
+    // Lines are separated by newlines
+    else if (CurItemType == Line)
+      printf("\n");
+    // Tail newline
+    else if (CurItemType == Number)
+      printf("\n");
+  }
+  else if (PrevItemType == Number)
+  {
+    // No delimiter between number and chunk
+    if (CurItemType == Chunk)
+      ;
+    // Heading newline
+    else if (CurItemType == Line)
+      printf("\n");
+    // Numbers are separated by spaces
+    else if (CurItemType == Number)
+      printf(" ");
+  }
 }
 
 // ) Freetown

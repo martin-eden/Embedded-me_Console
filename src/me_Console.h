@@ -24,7 +24,7 @@ namespace me_Console
 
     Second idea is raising level of abstraction for caller.
     As a user, I don't want to care how exactly number is formatted
-    when printed. I just want to call "Print("millis");
+    when printed. I just want to call "Print("millis: ");
     Print(millis());" and see parseable result.
 
       Also I want inherent indentation. So when "foo()" does
@@ -55,11 +55,32 @@ namespace me_Console
     length of list of numbers.
   */
 
+  /*
+    Item type
+
+    Used in detection what delimiter we should emit between two
+    items.
+
+    Can be "chunk", "line" or "number".
+  */
+  enum TItemType
+  {
+    Chunk,
+    Line,
+    Number
+  };
+
   class TConsole
   {
     public:
       // Initialize UART to given speed
       TBool Init(TUint_4 SerialSpeed);
+
+      // Flushing destructor
+      ~TConsole();
+
+      // Write pending delimiter before death
+      void Flush();
 
       // ( Indents!
 
@@ -92,9 +113,6 @@ namespace me_Console
       // Print newline
       void Newline();
 
-      // Print space
-      void Space();
-
       // Print separation line
       void Line();
 
@@ -119,28 +137,27 @@ namespace me_Console
       /*
         Internal mechanics to avoid double spaces and heading/trailing
         spaces in output.
-
-        Flag to emit Print()-specific delimiter (newline or space)
       */
-      TBool NeedDelimiter;
-
-      // Flag that current line is empty
-      TBool LineIsEmpty;
+      // Last item type
+      TItemType LastItemType;
 
       // Indentation level
       TUint_1 IndentLev;
 
-      // Print space before number if needed
-      void ApplyNumberNeeds();
-
-      // Print newline before string if needed
-      void ApplyStringNeeds();
+      // Print delimiter and maybe indent
+      void PrintDelimiterBefore(TItemType CurItemType);
   };
 
   namespace Freetown
   {
     // Print indentation
     void PrintIndent(TUint_1 IndentLev);
+
+    // Print delimiter
+    void PrintDelimiter(
+      TItemType PrevItemType,
+      TItemType CurItemType
+    );
   }
 }
 
