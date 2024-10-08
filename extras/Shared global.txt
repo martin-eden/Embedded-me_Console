@@ -1,0 +1,28 @@
+Global shared variable "Console"..
+
+Solved that quest.
+
+In normal languages you just define global variable in root file
+or in root namespace.
+
+In C++ you may use "static" for global variables. They will be global,
+but not shared. Wtf?:
+
+me_Console.h:
+  static me_Console::TConsole Console;
+
+Anyone who will include "me_Console.h" will see class instance
+under name "Console" and can use it. But they are different instances
+for each user module. Real useless.
+
+Some hipsters recommend singletons. Just create one more global
+class and call it's cool method like "getInstance()" to get instance of
+shared class. Very convenient!
+
+..Anyway, the right way to create global shared variable is
+
+me_Console.h:
+  extern me_Console::TConsole Console;
+
+me_Console.cpp:
+  me_Console::TConsole Console;
