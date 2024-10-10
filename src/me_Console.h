@@ -24,7 +24,7 @@ namespace me_Console
 
     Second idea is raising level of abstraction for caller.
     As a user, I don't want to care how exactly number is formatted
-    when printed. I just want to call "Print("millis: ");
+    when printed. I just want to call "Print("millis()");
     Print(millis());" and see parseable result.
 
       Also I want inherent indentation. So when "foo()" does
@@ -34,13 +34,21 @@ namespace me_Console
         foo:
           baz!
 
-    Problem is strings. Should "Print()" for strings produce standalone
-    line or print on current line?
+    Print() and Write()
 
-    Current approach is that Print() for strings prints on standalone
-    line and Write() prints on current line. For numbers Print()
-    prints on current line. And there is no Write() for numbers.
-    That's ugly and unintuitive.
+    Print() is fire-and-forget. For argument it supports ints,
+    memory segments and asciiz. They all be printed somehow,
+    with indents and delimiters.
+
+    Write() is a core data printer without delimiters between items.
+    For argument it supports memory segment and asciiz.
+
+    Useful when you printing several items on one line:
+
+      // Produce "Time spent: 0000000029"
+      Write("Time spent:");
+      Print(millis());
+
 
     Float numbers are not supported, no need (yet?).
 
@@ -48,7 +56,7 @@ namespace me_Console
     zeroes. Signed integers always have "-" or "+" before value.
     Zero of signed type is represented with "+" sign.
 
-    So Print(42) may produce "042", "00042", "0000000042", "+042", ...
+    So "Print((TUint_2) 42)" will produce "00042".
 
     This allows us to parse integers back to original types.
     Also fixed-length numbers are neat when you need to estimate
@@ -79,14 +87,13 @@ namespace me_Console
       // Flushing destructor
       ~TConsole();
 
-      // Write pending delimiter before death
+      // Write pending delimiter
       void Flush();
 
       // ( Indents!
 
       // Increase indent
       void Indent();
-
       // Decrease indent
       void Unindent();
 
@@ -110,11 +117,8 @@ namespace me_Console
 
       // ) Print
 
-      // Print newline
-      void Newline();
-
-      // Print separation line
-      void Line();
+      // Print newline next time
+      void EndLine();
 
       // ( Custom printers for base types
 
@@ -157,6 +161,11 @@ namespace me_Console
     void PrintDelimiter(
       TItemType PrevItemType,
       TItemType CurItemType
+    );
+
+    // Print memory contents
+    void PrintMem(
+      me_MemorySegment::TMemorySegment
     );
   }
 }

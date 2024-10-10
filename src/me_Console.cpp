@@ -2,19 +2,20 @@
 
 /*
   Author: Martin Eden
-  Status: sketching
-  Last mod.: 2024-10-08
+  Last mod.: 2024-10-10
 */
 
 #include "me_Console.h"
 
 #include <me_BaseTypes.h>
+
+#include <stdio.h> // printf()
 #include <me_InstallStandardStreams.h> // make printf() work
+
 #include <me_MemorySegment.h> // TMemorySegment
 #include <me_String.h> // formatting to TMemorySegment
 
 #include <HardwareSerial.h> // "Serial" for Init()
-#include <stdio.h> // printf()
 
 using namespace me_Console;
 
@@ -52,7 +53,7 @@ TConsole::~TConsole()
 */
 void TConsole::Flush()
 {
-  PrintDelimiterBefore(TItemType::Chunk);
+  Write("");
 }
 
 // Max byte value. I need to move such lame constants somewhere
@@ -102,9 +103,6 @@ void TConsole::PrintDelimiterBefore(
   {
     Freetown::PrintIndent(IndentLev);
   }
-
-  // Set last item type to this one
-  LastItemType = CurItemType;
 }
 
 /*
@@ -114,9 +112,13 @@ void TConsole::Write(
   TMemorySegment MemSeg
 )
 {
-  PrintDelimiterBefore(TItemType::Chunk);
+  TItemType ItemType = Chunk;
 
-  me_MemorySegment::Freetown::Print(MemSeg);
+  PrintDelimiterBefore(ItemType);
+
+  Freetown::PrintMem(MemSeg);
+
+  LastItemType = ItemType;
 }
 
 /*
@@ -136,9 +138,13 @@ void TConsole::Print(
   TMemorySegment MemSeg
 )
 {
-  PrintDelimiterBefore(TItemType::Line);
+  TItemType ItemType = TItemType::Line;
 
-  me_MemorySegment::Freetown::Print(MemSeg);
+  PrintDelimiterBefore(ItemType);
+
+  Freetown::PrintMem(MemSeg);
+
+  LastItemType = ItemType;
 }
 
 /*
@@ -154,19 +160,9 @@ void TConsole::Print(
 /*
   Print newline next time
 */
-void TConsole::Newline()
+void TConsole::EndLine()
 {
   LastItemType = TItemType::Line;
-}
-
-/*
-  Print separation line
-
-  Current implementation prints "--".
-*/
-void TConsole::Line()
-{
-  Print("--");
 }
 
 /*
@@ -176,11 +172,15 @@ void TConsole::Print(
   TUint_1 Value
 )
 {
-  PrintDelimiterBefore(TItemType::Number);
+  TItemType ItemType = TItemType::Number;
+
+  PrintDelimiterBefore(ItemType);
 
   me_String::TString Str;
   Str.Format(Value);
-  me_MemorySegment::Freetown::Print(Str.GetData());
+  Freetown::PrintMem(Str.GetData());
+
+  LastItemType = ItemType;
 }
 
 /*
@@ -194,11 +194,15 @@ void TConsole::Print(
     Same code, but Format() is overridden and so different
     function is called.
   */
-  PrintDelimiterBefore(TItemType::Number);
+  TItemType ItemType = TItemType::Number;
+
+  PrintDelimiterBefore(ItemType);
 
   me_String::TString Str;
   Str.Format(Value);
-  me_MemorySegment::Freetown::Print(Str.GetData());
+  Freetown::PrintMem(Str.GetData());
+
+  LastItemType = ItemType;
 }
 
 /*
@@ -208,11 +212,15 @@ void TConsole::Print(
   TUint_4 Value
 )
 {
-  PrintDelimiterBefore(TItemType::Number);
+  TItemType ItemType = TItemType::Number;
+
+  PrintDelimiterBefore(ItemType);
 
   me_String::TString Str;
   Str.Format(Value);
-  me_MemorySegment::Freetown::Print(Str.GetData());
+  Freetown::PrintMem(Str.GetData());
+
+  LastItemType = ItemType;
 }
 
 /*
@@ -222,11 +230,15 @@ void TConsole::Print(
   TSint_1 Value
 )
 {
-  PrintDelimiterBefore(TItemType::Number);
+  TItemType ItemType = TItemType::Number;
+
+  PrintDelimiterBefore(ItemType);
 
   me_String::TString Str;
   Str.Format(Value);
-  me_MemorySegment::Freetown::Print(Str.GetData());
+  Freetown::PrintMem(Str.GetData());
+
+  LastItemType = ItemType;
 }
 
 /*
@@ -236,11 +248,15 @@ void TConsole::Print(
   TSint_2 Value
 )
 {
-  PrintDelimiterBefore(TItemType::Number);
+  TItemType ItemType = TItemType::Number;
+
+  PrintDelimiterBefore(ItemType);
 
   me_String::TString Str;
   Str.Format(Value);
-  me_MemorySegment::Freetown::Print(Str.GetData());
+  Freetown::PrintMem(Str.GetData());
+
+  LastItemType = ItemType;
 }
 
 /*
@@ -250,11 +266,15 @@ void TConsole::Print(
   TSint_4 Value
 )
 {
-  PrintDelimiterBefore(TItemType::Number);
+  TItemType ItemType = TItemType::Number;
+
+  PrintDelimiterBefore(ItemType);
 
   me_String::TString Str;
   Str.Format(Value);
-  me_MemorySegment::Freetown::Print(Str.GetData());
+  Freetown::PrintMem(Str.GetData());
+
+  LastItemType = ItemType;
 }
 
 // ( Freetown
@@ -277,9 +297,9 @@ void me_Console::Freetown::PrintIndent(
 
    2nd > Chunk Line Number
   1st
-  Chunk  ""    \n    ""
+  Chunk  ""    \n    " "
   Line   \n    \n    \n
-  Number ""    \n    " "
+  Number " "   \n    " "
 */
 void me_Console::Freetown::PrintDelimiter(
   TItemType PrevItemType,
@@ -294,10 +314,10 @@ void me_Console::Freetown::PrintDelimiter(
     // Heading newline
     else if (CurItemType == Line)
       printf("\n");
-    // No delimiter between chunk and number
+    // Space between chunk and number
     else if (CurItemType == Number)
     {
-      ;
+      printf(" ");
     }
   }
   else if (PrevItemType == Line)
@@ -314,16 +334,26 @@ void me_Console::Freetown::PrintDelimiter(
   }
   else if (PrevItemType == Number)
   {
-    // No delimiter between number and chunk
+    // Space between number and chunk
     if (CurItemType == Chunk)
-      ;
+      printf(" ");
     // Heading newline
     else if (CurItemType == Line)
       printf("\n");
-    // Numbers are separated by spaces
+    // Space between numbers
     else if (CurItemType == Number)
       printf(" ");
   }
+}
+
+/*
+  Print memory segment contents
+*/
+void me_Console::Freetown::PrintMem(
+  TMemorySegment MemSeg
+)
+{
+  fwrite(MemSeg.Bytes, MemSeg.Size, 1, stdout);
 }
 
 // ) Freetown
@@ -337,4 +367,5 @@ me_Console::TConsole Console;
   2024-10-03
   2024-10-06
   2024-10-08
+  2024-10-10
 */
