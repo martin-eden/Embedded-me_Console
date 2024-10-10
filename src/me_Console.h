@@ -2,8 +2,7 @@
 
 /*
   Author: Martin Eden
-  Status: sketched
-  Last mod.: 2024-10-08
+  Last mod.: 2024-10-10
 */
 
 #pragma once
@@ -148,7 +147,7 @@ namespace me_Console
       // Indentation level
       TUint_1 IndentLev;
 
-      // Print delimiter and maybe indent
+      // Print delimiter and maybe indent before item
       void PrintDelimiterBefore(TItemType CurItemType);
   };
 
@@ -184,4 +183,5 @@ extern me_Console::TConsole Console;
   2024-10-03
   2024-10-06
   2024-10-08
+  2024-10-10
 */
