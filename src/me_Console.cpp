@@ -9,9 +9,6 @@
 
 #include <me_BaseTypes.h>
 
-#include <stdio.h> // printf()
-#include <me_InstallStandardStreams.h> // make printf() work
-
 #include <me_MemorySegment.h> // TMemorySegment
 #include <me_String.h> // formatting to TMemorySegment
 
@@ -30,7 +27,6 @@ TBool TConsole::Init(
 )
 {
   Serial.begin(SerialSpeed);
-  InstallStandardStreams();
 
   LastItemType = TItemType::Chunk;
   IndentLev = 0;
@@ -287,7 +283,7 @@ void me_Console::Freetown::PrintIndent(
 )
 {
   for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
-    printf("  ");
+    Serial.write("  ");
 }
 
 /*
@@ -306,6 +302,9 @@ void me_Console::Freetown::PrintDelimiter(
   TItemType CurItemType
 )
 {
+  TBool WriteSpace = false;
+  TBool WriteNewline = false;
+
   if (PrevItemType == Chunk)
   {
     // No delimiters between chunks
@@ -313,37 +312,40 @@ void me_Console::Freetown::PrintDelimiter(
       ;
     // Heading newline
     else if (CurItemType == Line)
-      printf("\n");
+      WriteNewline = true;
     // Space between chunk and number
     else if (CurItemType == Number)
-    {
-      printf(" ");
-    }
+      WriteSpace = true;
   }
   else if (PrevItemType == Line)
   {
     // Tail newline
     if (CurItemType == Chunk)
-      printf("\n");
+      WriteNewline = true;
     // Lines are separated by newlines
     else if (CurItemType == Line)
-      printf("\n");
+      WriteNewline = true;
     // Tail newline
     else if (CurItemType == Number)
-      printf("\n");
+      WriteNewline = true;
   }
   else if (PrevItemType == Number)
   {
     // Space between number and chunk
     if (CurItemType == Chunk)
-      printf(" ");
+      WriteSpace = true;
     // Heading newline
     else if (CurItemType == Line)
-      printf("\n");
+      WriteNewline = true;
     // Space between numbers
     else if (CurItemType == Number)
-      printf(" ");
+      WriteSpace = true;
   }
+
+  if (WriteSpace)
+    Serial.write(' ');
+  else if (WriteNewline)
+    Serial.write('\n');
 }
 
 /*
@@ -353,7 +355,8 @@ void me_Console::Freetown::PrintMem(
   TMemorySegment MemSeg
 )
 {
-  fwrite(MemSeg.Bytes, MemSeg.Size, 1, stdout);
+  for (TUint_2 Offset = 0; Offset < MemSeg.Size; ++Offset)
+    Serial.write(MemSeg.Bytes[Offset]);
 }
 
 // ) Freetown
