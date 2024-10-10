@@ -125,6 +125,8 @@ void RunTest()
   Console.Print("--");
 
   Console.Print("[me_Console] That's all folks!");
+
+  Console.Flush();
 }
 
 /*
