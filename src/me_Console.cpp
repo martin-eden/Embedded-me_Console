@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-10
+  Last mod.: 2024-10-12
 */
 
 #include "me_Console.h"
@@ -91,14 +91,15 @@ void TConsole::PrintDelimiterBefore(
   // Print closing delimiter for previous item
   Freetown::PrintDelimiter(LastItemType, CurItemType);
 
-  // New lines are starting with indent
+  // Non-empty items on new lines are starting with indent
   if (
-    (LastItemType == TItemType::Line) ||
-    (CurItemType == TItemType::Line)
+    (
+      (LastItemType == TItemType::Line) ||
+      (LastItemType == TItemType::Nothing)
+    ) &&
+    (CurItemType != TItemType::Nothing)
   )
-  {
     Freetown::PrintIndent(IndentLev);
-  }
 }
 
 /*
@@ -158,7 +159,10 @@ void TConsole::Print(
 */
 void TConsole::EndLine()
 {
-  LastItemType = TItemType::Line;
+  if (LastItemType != TItemType::Nothing)
+    PrintDelimiterBefore(TItemType::Line);
+
+  LastItemType = TItemType::Nothing;
 }
 
 /*
@@ -291,58 +295,70 @@ void me_Console::Freetown::PrintIndent(
 
   Delimiter depends of previous and current item types.
 
-   2nd > Chunk Line Number
-  1st
-  Chunk  ""    \n    " "
-  Line   \n    \n    \n
-  Number " "   \n    " "
+   Next > | Chunk Line Number Nothing
+  --Prev--+----------------------------
+  Chunk   | ""    \n   " "    ""
+  Line    | \n    \n   \n     \n
+  Number  | " "   \n   " "    ""
+  Nothing | ""    ""   ""     ""
 */
 void me_Console::Freetown::PrintDelimiter(
   TItemType PrevItemType,
   TItemType CurItemType
 )
 {
+  TBool WriteNothing = false;
   TBool WriteSpace = false;
   TBool WriteNewline = false;
 
   if (PrevItemType == Chunk)
   {
-    // No delimiters between chunks
     if (CurItemType == Chunk)
-      ;
-    // Heading newline
+      WriteNothing = true;
     else if (CurItemType == Line)
       WriteNewline = true;
-    // Space between chunk and number
     else if (CurItemType == Number)
       WriteSpace = true;
+    else if (CurItemType == Nothing)
+      WriteNothing = true;
   }
   else if (PrevItemType == Line)
   {
-    // Tail newline
     if (CurItemType == Chunk)
       WriteNewline = true;
-    // Lines are separated by newlines
     else if (CurItemType == Line)
       WriteNewline = true;
-    // Tail newline
     else if (CurItemType == Number)
+      WriteNewline = true;
+    else if (CurItemType == Nothing)
       WriteNewline = true;
   }
   else if (PrevItemType == Number)
   {
-    // Space between number and chunk
     if (CurItemType == Chunk)
       WriteSpace = true;
-    // Heading newline
     else if (CurItemType == Line)
       WriteNewline = true;
-    // Space between numbers
     else if (CurItemType == Number)
       WriteSpace = true;
+    else if (CurItemType == Nothing)
+      WriteNothing = true;
+  }
+  else if (PrevItemType == Nothing)
+  {
+    if (CurItemType == Chunk)
+      WriteNothing = true;
+    else if (CurItemType == Line)
+      WriteNothing = true;
+    else if (CurItemType == Number)
+      WriteNothing = true;
+    else if (CurItemType == Nothing)
+      WriteNothing = true;
   }
 
-  if (WriteSpace)
+  if (WriteNothing)
+    ;
+  else if (WriteSpace)
     Serial.write(' ');
   else if (WriteNewline)
     Serial.write('\n');
