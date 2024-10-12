@@ -76,12 +76,7 @@ void TConsole::Write(
   TMemorySegment MemSeg
 )
 {
-  TItemType ItemType;
-
-  if (MemSeg.Size == 0)
-    ItemType = Nothing;
-  else
-    ItemType = Chunk;
+  TItemType ItemType = TItemType::Chunk;
 
   PrintDelimiterBefore(ItemType);
 
