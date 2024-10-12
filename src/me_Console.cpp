@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-12
+  Last mod.: 2024-10-13
 */
 
 #include "me_Console.h"
@@ -12,27 +12,12 @@
 #include <me_MemorySegment.h> // TMemorySegment
 #include <me_String.h> // formatting to TMemorySegment
 
-#include <HardwareSerial.h> // "Serial" for Init()
+#include <HardwareSerial.h> // "Serial" for Freetown::PrintChar
 
 using namespace me_Console;
 
 using
   me_MemorySegment::TMemorySegment;
-
-/*
-  Setup console with serial speed
-*/
-TBool TConsole::Init(
-  TUint_4 SerialSpeed
-)
-{
-  Serial.begin(SerialSpeed);
-
-  LastItemType = TItemType::Nothing;
-  IndentLev = 0;
-
-  return true;
-}
 
 // Max byte value. I need to move such lame constants somewhere
 const TUint_1 Max_Uint_1 = 0xFF;
@@ -141,7 +126,7 @@ void TConsole::Print(
 }
 
 /*
-  Print newline next time
+  Print newline if not on empty line
 */
 void TConsole::EndLine()
 {
