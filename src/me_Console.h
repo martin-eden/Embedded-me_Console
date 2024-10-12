@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-10
+  Last mod.: 2024-10-12
 */
 
 #pragma once
@@ -68,13 +68,14 @@ namespace me_Console
     Used in detection what delimiter we should emit between two
     items.
 
-    Can be "chunk", "line" or "number".
+    Can be "chunk", "line", "number" or "nothing".
   */
   enum TItemType
   {
     Chunk,
     Line,
-    Number
+    Number,
+    Nothing
   };
 
   class TConsole
