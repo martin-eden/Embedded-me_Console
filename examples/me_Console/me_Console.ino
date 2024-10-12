@@ -12,6 +12,8 @@
 
 void setup()
 {
+  Serial.begin(me_UartSpeeds::Arduino_Normal_Bps);
+
   RunTest();
 }
 
@@ -38,8 +40,6 @@ void RunTest()
       You can still use it but beware that global UART
       will be closed at your instance destruction.
   */
-
-  Console.Init(me_UartSpeeds::Arduino_Normal_Bps);
 
   Console.Print("[me_Console] demo.");
 

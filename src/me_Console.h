@@ -80,9 +80,6 @@ namespace me_Console
   class TConsole
   {
     public:
-      // Initialize UART to given speed
-      TBool Init(TUint_4 SerialSpeed);
-
       // ( Indents!
 
       // Increase indent
@@ -110,7 +107,7 @@ namespace me_Console
 
       // ) Print
 
-      // Print newline next time
+      // Print newline if not on empty line
       void EndLine();
 
       // ( Custom printers for base types
@@ -136,10 +133,10 @@ namespace me_Console
         spaces in output.
       */
       // Last item type
-      TItemType LastItemType;
+      TItemType LastItemType = TItemType::Nothing;
 
       // Indentation level
-      TUint_1 IndentLev;
+      TUint_1 IndentLev = 0;
 
       // Print delimiter and maybe indent before item
       void PrintDelimiterBefore(TItemType CurItemType);
