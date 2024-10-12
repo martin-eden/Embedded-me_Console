@@ -28,7 +28,7 @@ TBool TConsole::Init(
 {
   Serial.begin(SerialSpeed);
 
-  LastItemType = TItemType::Chunk;
+  LastItemType = TItemType::Nothing;
   IndentLev = 0;
 
   return true;
@@ -109,7 +109,12 @@ void TConsole::Write(
   TMemorySegment MemSeg
 )
 {
-  TItemType ItemType = Chunk;
+  TItemType ItemType;
+
+  if (MemSeg.Size == 0)
+    ItemType = Nothing;
+  else
+    ItemType = Chunk;
 
   PrintDelimiterBefore(ItemType);
 
