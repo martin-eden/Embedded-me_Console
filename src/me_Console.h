@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-12
+  Last mod.: 2024-10-13
 */
 
 #pragma once
@@ -48,7 +48,6 @@ namespace me_Console
       Write("Time spent:");
       Print(millis());
 
-
     Float numbers are not supported, no need (yet?).
 
     Integer numbers are represented in decimal ASCII with leading
@@ -83,12 +82,6 @@ namespace me_Console
     public:
       // Initialize UART to given speed
       TBool Init(TUint_4 SerialSpeed);
-
-      // Flushing destructor
-      ~TConsole();
-
-      // Write pending delimiter
-      void Flush();
 
       // ( Indents!
 
@@ -164,9 +157,10 @@ namespace me_Console
     );
 
     // Print memory contents
-    void PrintMem(
-      me_MemorySegment::TMemorySegment
-    );
+    void PrintMem(me_MemorySegment::TMemorySegment);
+
+    // Print character
+    void PrintChar(TChar Char);
   }
 }
 
@@ -185,4 +179,5 @@ extern me_Console::TConsole Console;
   2024-10-06
   2024-10-08
   2024-10-10
+  2024-10-13 [-] Flush, ~TConsole
 */

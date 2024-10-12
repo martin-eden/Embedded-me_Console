@@ -34,24 +34,6 @@ TBool TConsole::Init(
   return true;
 }
 
-/*
-  Flushing destructor
-*/
-TConsole::~TConsole()
-{
-  Flush();
-
-  Serial.end();
-}
-
-/*
-  Write pending delimiter for last item
-*/
-void TConsole::Flush()
-{
-  Write("");
-}
-
 // Max byte value. I need to move such lame constants somewhere
 const TUint_1 Max_Uint_1 = 0xFF;
 
@@ -140,13 +122,12 @@ void TConsole::Print(
   TMemorySegment MemSeg
 )
 {
-  TItemType ItemType = TItemType::Line;
-
-  PrintDelimiterBefore(ItemType);
+  PrintDelimiterBefore(TItemType::Line);
 
   Freetown::PrintMem(MemSeg);
+  Freetown::PrintChar('\n');
 
-  LastItemType = ItemType;
+  LastItemType = TItemType::Nothing;
 }
 
 /*
@@ -364,9 +345,9 @@ void me_Console::Freetown::PrintDelimiter(
   if (WriteNothing)
     ;
   else if (WriteSpace)
-    Serial.write(' ');
+    Freetown::PrintChar(' ');
   else if (WriteNewline)
-    Serial.write('\n');
+    Freetown::PrintChar('\n');
 }
 
 /*
@@ -377,7 +358,17 @@ void me_Console::Freetown::PrintMem(
 )
 {
   for (TUint_2 Offset = 0; Offset < MemSeg.Size; ++Offset)
-    Serial.write(MemSeg.Bytes[Offset]);
+    Freetown::PrintChar(MemSeg.Bytes[Offset]);
+}
+
+/*
+  Print character
+
+  Surprisingly useful function when you want to isolate your output.
+*/
+void me_Console::Freetown::PrintChar(TChar Char)
+{
+  Serial.write(Char);
 }
 
 // ) Freetown

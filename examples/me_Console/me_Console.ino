@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-12
+  Last mod.: 2024-10-13
 */
 
 #include <me_Console.h>
@@ -113,8 +113,6 @@ void RunTest()
   Console.Print("--");
 
   Console.Print("[me_Console] That's all folks!");
-
-  Console.Flush();
 }
 
 /*
@@ -122,4 +120,5 @@ void RunTest()
   2024-10-06
   2024-10-08
   2024-10-10
+  2024-10-13
 */
