@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-13
+  Last mod.: 2024-10-17
 */
 
 #include "me_Console.h"
@@ -10,7 +10,6 @@
 #include <me_BaseTypes.h>
 
 #include <me_MemorySegment.h> // TMemorySegment
-#include <me_String.h> // formatting to TMemorySegment
 
 #include <HardwareSerial.h> // "Serial" for Freetown::PrintChar
 
@@ -131,117 +130,10 @@ void TConsole::EndLine()
   LastItemType = TItemType::Nothing;
 }
 
-/*
-  Print TUint_1
-*/
-void TConsole::Print(
-  TUint_1 Value
-)
-{
-  TItemType ItemType = TItemType::Number;
-
-  PrintDelimiterBefore(ItemType);
-
-  me_String::TString Str;
-  Str.Format(Value);
-  Freetown::PrintMem(Str.GetData());
-
-  LastItemType = ItemType;
-}
 
 /*
-  Print TUint_2
+  Print()'s for TUint_1, ..., TSint_4 are in "NumberPrinting.cpp".
 */
-void TConsole::Print(
-  TUint_2 Value
-)
-{
-  /*
-    Same code, but Format() is overridden and so different
-    function is called.
-  */
-  TItemType ItemType = TItemType::Number;
-
-  PrintDelimiterBefore(ItemType);
-
-  me_String::TString Str;
-  Str.Format(Value);
-  Freetown::PrintMem(Str.GetData());
-
-  LastItemType = ItemType;
-}
-
-/*
-  Print TUint_4
-*/
-void TConsole::Print(
-  TUint_4 Value
-)
-{
-  TItemType ItemType = TItemType::Number;
-
-  PrintDelimiterBefore(ItemType);
-
-  me_String::TString Str;
-  Str.Format(Value);
-  Freetown::PrintMem(Str.GetData());
-
-  LastItemType = ItemType;
-}
-
-/*
-  Print TSint_1
-*/
-void TConsole::Print(
-  TSint_1 Value
-)
-{
-  TItemType ItemType = TItemType::Number;
-
-  PrintDelimiterBefore(ItemType);
-
-  me_String::TString Str;
-  Str.Format(Value);
-  Freetown::PrintMem(Str.GetData());
-
-  LastItemType = ItemType;
-}
-
-/*
-  Print TSint_2
-*/
-void TConsole::Print(
-  TSint_2 Value
-)
-{
-  TItemType ItemType = TItemType::Number;
-
-  PrintDelimiterBefore(ItemType);
-
-  me_String::TString Str;
-  Str.Format(Value);
-  Freetown::PrintMem(Str.GetData());
-
-  LastItemType = ItemType;
-}
-
-/*
-  Print TSint_4
-*/
-void TConsole::Print(
-  TSint_4 Value
-)
-{
-  TItemType ItemType = TItemType::Number;
-
-  PrintDelimiterBefore(ItemType);
-
-  me_String::TString Str;
-  Str.Format(Value);
-  Freetown::PrintMem(Str.GetData());
-
-  LastItemType = ItemType;
-}
 
 // ( Freetown
 
@@ -363,4 +255,5 @@ me_Console::TConsole Console;
   2024-10-06
   2024-10-08
   2024-10-10
+  2024-10-17
 */
