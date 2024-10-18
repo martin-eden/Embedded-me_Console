@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-13
+  Last mod.: 2024-10-18
 */
 
 #pragma once
@@ -145,7 +145,11 @@ namespace me_Console
   namespace Freetown
   {
     // Print indentation
-    void PrintIndent(TUint_1 IndentLev);
+    void PrintIndent(
+      TUint_1 IndentLev,
+      TItemType PrevItemType,
+      TItemType CurItemType
+    );
 
     // Print delimiter
     void PrintDelimiter(
@@ -177,4 +181,5 @@ extern me_Console::TConsole Console;
   2024-10-08
   2024-10-10
   2024-10-13 [-] Flush, ~TConsole
+  2024-10-18
 */

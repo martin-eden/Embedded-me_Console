@@ -56,16 +56,8 @@ void TConsole::PrintDelimiterBefore(
 {
   // Print closing delimiter for previous item
   Freetown::PrintDelimiter(LastItemType, CurItemType);
-
-  // Non-empty items on new lines are starting with indent
-  if (
-    (
-      (LastItemType == TItemType::Line) ||
-      (LastItemType == TItemType::Nothing)
-    ) &&
-    (CurItemType != TItemType::Nothing)
-  )
-    Freetown::PrintIndent(IndentLev);
+  // Print indentation for current item
+  Freetown::PrintIndent(IndentLev, LastItemType, CurItemType);
 }
 
 /*
@@ -125,9 +117,10 @@ void TConsole::Print(
 void TConsole::EndLine()
 {
   if (LastItemType != TItemType::Nothing)
-    PrintDelimiterBefore(TItemType::Line);
-
-  LastItemType = TItemType::Nothing;
+  {
+    Freetown::PrintDelimiter(LastItemType, TItemType::Line);
+    LastItemType = TItemType::Nothing;
+  }
 }
 
 
@@ -136,17 +129,6 @@ void TConsole::EndLine()
 */
 
 // ( Freetown
-
-/*
-  Print indentation
-*/
-void me_Console::Freetown::PrintIndent(
-  TUint_1 IndentLev
-)
-{
-  for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
-    Serial.write("  ");
-}
 
 /*
   Print delimiter
@@ -223,6 +205,82 @@ void me_Console::Freetown::PrintDelimiter(
 }
 
 /*
+  Print indentation
+
+  Same as for PrintDelimiter(), whether or not print indentation
+  depends of types of adjacent items:
+
+   Next > | Chunk Line Number Nothing
+  --Prev--+----------------------------
+  Chunk   |   -     +     -      -
+  Line    |   +     +     +      -
+  Number  |   -     +     -      -
+  Nothing |   +     +     +      -
+
+*/
+void me_Console::Freetown::PrintIndent(
+  TUint_1 IndentLev,
+  TItemType PrevItemType,
+  TItemType CurItemType
+)
+{
+  TBool DoIt = false;
+
+  {
+    if (PrevItemType == Chunk)
+    {
+      if (CurItemType == Chunk)
+        DoIt = false;
+      else if (CurItemType == Line)
+        DoIt = true;
+      else if (CurItemType == Number)
+        DoIt = false;
+      else if (CurItemType == Nothing)
+        DoIt = false;
+    }
+    else if (PrevItemType == Line)
+    {
+      if (CurItemType == Chunk)
+        DoIt = true;
+      else if (CurItemType == Line)
+        DoIt = true;
+      else if (CurItemType == Number)
+        DoIt = true;
+      else if (CurItemType == Nothing)
+        DoIt = false;
+    }
+    else if (PrevItemType == Number)
+    {
+      if (CurItemType == Chunk)
+        DoIt = false;
+      else if (CurItemType == Line)
+        DoIt = true;
+      else if (CurItemType == Number)
+        DoIt = false;
+      else if (CurItemType == Nothing)
+        DoIt = false;
+    }
+    else if (PrevItemType == Nothing)
+    {
+      if (CurItemType == Chunk)
+        DoIt = true;
+      else if (CurItemType == Line)
+        DoIt = true;
+      else if (CurItemType == Number)
+        DoIt = true;
+      else if (CurItemType == Nothing)
+        DoIt = false;
+    }
+  }
+
+  if (DoIt)
+  {
+    for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
+      Serial.write("  ");
+  }
+}
+
+/*
   Print memory segment contents
 */
 void me_Console::Freetown::PrintMem(
@@ -256,4 +314,5 @@ me_Console::TConsole Console;
   2024-10-08
   2024-10-10
   2024-10-17
+  2024-10-18
 */
