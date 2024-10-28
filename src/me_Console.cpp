@@ -2,16 +2,14 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-17
+  Last mod.: 2024-10-28
 */
 
 #include "me_Console.h"
 
 #include <me_BaseTypes.h>
-
 #include <me_MemorySegment.h> // TMemorySegment
-
-#include <HardwareSerial.h> // "Serial" for Freetown::PrintChar
+#include <me_Uart.h>
 
 using namespace me_Console;
 
@@ -276,7 +274,10 @@ void me_Console::Freetown::PrintIndent(
   if (DoIt)
   {
     for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
-      Serial.write("  ");
+    {
+      Freetown::PrintChar(' ');
+      Freetown::PrintChar(' ');
+    }
   }
 }
 
@@ -298,7 +299,7 @@ void me_Console::Freetown::PrintMem(
 */
 void me_Console::Freetown::PrintChar(TChar Char)
 {
-  Serial.write(Char);
+  me_Uart::SendByte((TUint_1) Char);
 }
 
 // ) Freetown

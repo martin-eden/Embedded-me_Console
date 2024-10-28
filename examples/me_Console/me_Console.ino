@@ -2,17 +2,18 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-13
+  Last mod.: 2024-10-28
 */
 
 #include <me_Console.h>
 
 #include <me_BaseTypes.h>
 #include <me_UartSpeeds.h>
+#include <me_Uart.h>
 
 void setup()
 {
-  Serial.begin(me_UartSpeeds::Arduino_Normal_Bps);
+  me_Uart::Init(me_UartSpeeds::Arduino_Normal_Bps);
 
   RunTest();
 }
