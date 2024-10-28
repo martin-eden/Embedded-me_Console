@@ -7,6 +7,6 @@ arduino-cli lib uninstall me_String
 arduino-cli lib uninstall \
   me_String \
   me_MemorySegment \
-  me_InstallStandardStreams \
+  me_Uart \
   me_UartSpeeds \
   me_BaseTypes
