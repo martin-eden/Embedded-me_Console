@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-28
+  Last mod.: 2024-12-12
 */
 
 #include "me_Console.h"
@@ -78,10 +78,26 @@ void TConsole::Write(
   Write string binary contents
 */
 void TConsole::Write(
-  const TChar * Asciiz
+  const TAsciiz Asciiz
 )
 {
   Write(me_MemorySegment::Freetown::FromAsciiz(Asciiz));
+}
+
+/*
+  Write one character (size is one byte)
+*/
+void TConsole::Write(
+  TUint_1 Byte
+)
+{
+  TItemType ItemType = TItemType::Chunk;
+
+  PrintDelimiterBefore(ItemType);
+
+  Freetown::PrintUnit(Byte);
+
+  LastItemType = ItemType;
 }
 
 /*
@@ -94,7 +110,7 @@ void TConsole::Print(
   PrintDelimiterBefore(TItemType::Line);
 
   Freetown::PrintMem(MemSeg);
-  Freetown::PrintChar('\n');
+  Freetown::PrintUnit('\n');
 
   LastItemType = TItemType::Nothing;
 }
@@ -103,7 +119,7 @@ void TConsole::Print(
   Print string on new line and newline
 */
 void TConsole::Print(
-  const TChar * Asciiz
+  const TAsciiz Asciiz
 )
 {
   Print(me_MemorySegment::Freetown::FromAsciiz(Asciiz));
@@ -197,9 +213,9 @@ void me_Console::Freetown::PrintDelimiter(
   if (WriteNothing)
     ;
   else if (WriteSpace)
-    Freetown::PrintChar(' ');
+    Freetown::PrintUnit(' ');
   else if (WriteNewline)
-    Freetown::PrintChar('\n');
+    Freetown::PrintUnit('\n');
 }
 
 /*
@@ -275,8 +291,8 @@ void me_Console::Freetown::PrintIndent(
   {
     for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
     {
-      Freetown::PrintChar(' ');
-      Freetown::PrintChar(' ');
+      Freetown::PrintUnit(' ');
+      Freetown::PrintUnit(' ');
     }
   }
 }
@@ -289,7 +305,7 @@ void me_Console::Freetown::PrintMem(
 )
 {
   for (TUint_2 Offset = 0; Offset < MemSeg.Size; ++Offset)
-    Freetown::PrintChar(MemSeg.Bytes[Offset]);
+    Freetown::PrintUnit(MemSeg.Bytes[Offset]);
 }
 
 /*
@@ -297,9 +313,11 @@ void me_Console::Freetown::PrintMem(
 
   Surprisingly useful function when you want to isolate your output.
 */
-void me_Console::Freetown::PrintChar(TChar Char)
+void me_Console::Freetown::PrintUnit(
+  TUnit Unit
+)
 {
-  me_Uart::SendByte((TUint_1) Char);
+  me_Uart::SendByte(Unit);
 }
 
 // ) Freetown
@@ -316,4 +334,5 @@ me_Console::TConsole Console;
   2024-10-10
   2024-10-17
   2024-10-18
+  2024-12-12
 */
