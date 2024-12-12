@@ -2,18 +2,18 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-10-28
+  Last mod.: 2024-12-12
 */
 
 #include <me_Console.h>
 
 #include <me_BaseTypes.h>
-#include <me_UartSpeeds.h>
 #include <me_Uart.h>
+#include <me_UartSpeeds.h>
 
 void setup()
 {
-  me_Uart::Init(me_UartSpeeds::Arduino_Normal_Bps);
+  me_Uart::Init(me_UartSpeeds::Bps_115k);
 
   RunTest();
 }
@@ -122,4 +122,5 @@ void RunTest()
   2024-10-08
   2024-10-10
   2024-10-13
+  2024-12-12
 */
