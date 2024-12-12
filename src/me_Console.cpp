@@ -14,7 +14,8 @@
 using namespace me_Console;
 
 using
-  me_MemorySegment::TMemorySegment;
+  me_MemorySegment::TMemorySegment,
+  me_MemorySegment::TSegmentIterator;
 
 // Max byte value. I need to move such lame constants somewhere
 const TUint_1 Max_Uint_1 = 0xFF;
@@ -304,8 +305,14 @@ void me_Console::Freetown::PrintMem(
   TMemorySegment MemSeg
 )
 {
-  for (TUint_2 Offset = 0; Offset < MemSeg.Size; ++Offset)
-    Freetown::PrintUnit(MemSeg.Bytes[Offset]);
+  TSegmentIterator Rator;
+
+  Rator.Init(MemSeg, me_MemorySegment::Freetown::GetUnit);
+
+  TUnit Unit;
+
+  while (Rator.GetNext(&Unit))
+    Freetown::PrintUnit(Unit);
 }
 
 /*
