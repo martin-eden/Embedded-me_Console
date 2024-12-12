@@ -96,7 +96,7 @@ namespace me_Console
       // Data is ASCIIZ pointer
       void Write(const TAsciiz String);
       // Data is character
-      void Write(TUint_1 Byte);
+      void Write(TUnit Unit);
 
       // ) Write
 

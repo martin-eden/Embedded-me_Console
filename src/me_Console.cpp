@@ -53,10 +53,14 @@ void TConsole::PrintDelimiterBefore(
   TItemType CurItemType
 )
 {
+  using
+    me_Console::Freetown::PrintDelimiter,
+    me_Console::Freetown::PrintIndent;
+
   // Print closing delimiter for previous item
-  Freetown::PrintDelimiter(LastItemType, CurItemType);
+  PrintDelimiter(LastItemType, CurItemType);
   // Print indentation for current item
-  Freetown::PrintIndent(IndentLev, LastItemType, CurItemType);
+  PrintIndent(IndentLev, LastItemType, CurItemType);
 }
 
 /*
@@ -66,11 +70,14 @@ void TConsole::Write(
   TMemorySegment MemSeg
 )
 {
+  using
+    me_Console::Freetown::PrintMem;
+
   TItemType ItemType = TItemType::Chunk;
 
   PrintDelimiterBefore(ItemType);
 
-  Freetown::PrintMem(MemSeg);
+  PrintMem(MemSeg);
 
   LastItemType = ItemType;
 }
@@ -82,21 +89,27 @@ void TConsole::Write(
   const TAsciiz Asciiz
 )
 {
-  Write(me_MemorySegment::Freetown::FromAsciiz(Asciiz));
+  using
+    me_MemorySegment::Freetown::FromAsciiz;
+
+  Write(FromAsciiz(Asciiz));
 }
 
 /*
   Write one character (size is one byte)
 */
 void TConsole::Write(
-  TUint_1 Byte
+  TUnit Unit
 )
 {
+  using
+    me_Console::Freetown::PrintUnit;
+
   TItemType ItemType = TItemType::Chunk;
 
   PrintDelimiterBefore(ItemType);
 
-  Freetown::PrintUnit(Byte);
+  PrintUnit(Unit);
 
   LastItemType = ItemType;
 }
@@ -108,10 +121,14 @@ void TConsole::Print(
   TMemorySegment MemSeg
 )
 {
+  using
+    me_Console::Freetown::PrintMem,
+    me_Console::Freetown::PrintUnit;
+
   PrintDelimiterBefore(TItemType::Line);
 
-  Freetown::PrintMem(MemSeg);
-  Freetown::PrintUnit('\n');
+  PrintMem(MemSeg);
+  PrintUnit('\n');
 
   LastItemType = TItemType::Nothing;
 }
@@ -123,7 +140,10 @@ void TConsole::Print(
   const TAsciiz Asciiz
 )
 {
-  Print(me_MemorySegment::Freetown::FromAsciiz(Asciiz));
+  using
+    me_MemorySegment::Freetown::FromAsciiz;
+
+  Print(FromAsciiz(Asciiz));
 }
 
 /*
@@ -131,9 +151,12 @@ void TConsole::Print(
 */
 void TConsole::EndLine()
 {
+  using
+    me_Console::Freetown::PrintDelimiter;
+
   if (LastItemType != TItemType::Nothing)
   {
-    Freetown::PrintDelimiter(LastItemType, TItemType::Line);
+    PrintDelimiter(LastItemType, TItemType::Line);
     LastItemType = TItemType::Nothing;
   }
 }
@@ -162,6 +185,9 @@ void me_Console::Freetown::PrintDelimiter(
   TItemType CurItemType
 )
 {
+  using
+    me_Console::Freetown::PrintUnit;
+
   TBool WriteNothing = false;
   TBool WriteSpace = false;
   TBool WriteNewline = false;
@@ -214,9 +240,9 @@ void me_Console::Freetown::PrintDelimiter(
   if (WriteNothing)
     ;
   else if (WriteSpace)
-    Freetown::PrintUnit(' ');
+    PrintUnit(' ');
   else if (WriteNewline)
-    Freetown::PrintUnit('\n');
+    PrintUnit('\n');
 }
 
 /*
@@ -239,6 +265,9 @@ void me_Console::Freetown::PrintIndent(
   TItemType CurItemType
 )
 {
+  using
+    me_Console::Freetown::PrintUnit;
+
   TBool DoIt = false;
 
   {
@@ -292,8 +321,8 @@ void me_Console::Freetown::PrintIndent(
   {
     for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
     {
-      Freetown::PrintUnit(' ');
-      Freetown::PrintUnit(' ');
+      PrintUnit(' ');
+      PrintUnit(' ');
     }
   }
 }
@@ -305,6 +334,9 @@ void me_Console::Freetown::PrintMem(
   TMemorySegment MemSeg
 )
 {
+  using
+    me_Console::Freetown::PrintUnit;
+
   TSegmentIterator Rator;
 
   Rator.Init(MemSeg, me_MemorySegment::Freetown::GetUnit);
@@ -312,7 +344,7 @@ void me_Console::Freetown::PrintMem(
   TUnit Unit;
 
   while (Rator.GetNext(&Unit))
-    Freetown::PrintUnit(Unit);
+    PrintUnit(Unit);
 }
 
 /*
@@ -335,11 +367,6 @@ void me_Console::Freetown::PrintUnit(
 me_Console::TConsole Console;
 
 /*
-  2024-10-03
-  2024-10-06
-  2024-10-08
-  2024-10-10
-  2024-10-17
-  2024-10-18
+  2024-10 ######
   2024-12-12
 */
