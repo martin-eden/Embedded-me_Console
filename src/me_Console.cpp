@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-12
+  Last mod.: 2024-12-13
 */
 
 #include "me_Console.h"
@@ -339,7 +339,7 @@ void me_Console::Freetown::PrintMem(
 
   TSegmentIterator Rator;
 
-  Rator.Init(MemSeg, me_MemorySegment::Freetown::GetUnit);
+  Rator.Init(MemSeg, me_MemorySegment::Freetown::UnitGetter);
 
   TUnit Unit;
 
