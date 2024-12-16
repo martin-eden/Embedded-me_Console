@@ -8,8 +8,9 @@
 #include "me_Console.h"
 
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h> // TMemorySegment
-#include <me_Uart.h>
+#include <me_MemorySegment.h> // TMemorySegment, iterator
+#include <me_FlashMemory.h> // ReadByte()
+#include <me_Uart.h> // SendByte()
 
 using namespace me_Console;
 
@@ -83,6 +84,25 @@ void TConsole::Write(
 }
 
 /*
+  Raw print of program memory contents
+*/
+void TConsole::WriteFlash(
+  TMemorySegment FlashSeg
+)
+{
+  using
+    me_Console::Freetown::PrintProgmem;
+
+  TItemType ItemType = TItemType::Chunk;
+
+  PrintDelimiterBefore(ItemType);
+
+  PrintProgmem(FlashSeg);
+
+  LastItemType = ItemType;
+}
+
+/*
   Write string binary contents
 */
 void TConsole::Write(
@@ -128,6 +148,25 @@ void TConsole::Print(
   PrintDelimiterBefore(TItemType::Line);
 
   PrintMem(MemSeg);
+  PrintUnit('\n');
+
+  LastItemType = TItemType::Nothing;
+}
+
+/*
+  Print segment from program memory
+*/
+void TConsole::PrintFlash(
+  TMemorySegment FlashSeg
+)
+{
+  using
+    me_Console::Freetown::PrintProgmem,
+    me_Console::Freetown::PrintUnit;
+
+  PrintDelimiterBefore(TItemType::Line);
+
+  PrintProgmem(FlashSeg);
   PrintUnit('\n');
 
   LastItemType = TItemType::Nothing;
@@ -352,6 +391,34 @@ void me_Console::Freetown::PrintMem(
 }
 
 /*
+  Print program memory segment contents
+*/
+TBool me_Console::Freetown::PrintProgmem(
+  TMemorySegment FlashSeg
+)
+{
+  using
+    me_FlashMemory::GetByte;
+
+  TSegmentIterator Rator;
+  TAddress Addr;
+  TUint_1 Byte;
+
+  if (!Rator.Init(FlashSeg))
+    return false;
+
+  while (Rator.GetNext(&Addr))
+  {
+    if (!GetByte(&Byte, Addr))
+      return false;
+
+    PrintUnit((TUnit) Byte);
+  }
+
+  return true;
+}
+
+/*
   Print character
 
   Surprisingly useful function when you want to isolate your output.
@@ -373,4 +440,5 @@ me_Console::TConsole Console;
 /*
   2024-10 ######
   2024-12-12
+  2024-12-15
 */
