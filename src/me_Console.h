@@ -18,10 +18,19 @@ namespace me_Console
     We're reading and writing data to/from memory from/to UART without
     processing.
 
-    Two base data types:
+    Base data types:
 
       * byte (TUint_1)
-      * region of bytes (TMemorySegment)
+      * memory segment (TMemorySegment)
+      * program memory segment (TMemorySegment also)
+
+    Supported input/output:
+
+            Output > | Memory    UART
+      --Input--------+----------------------
+              Memory |  ---      Put..()
+      Program memory |  ---      PutProgmem..()
+                UART |  Get..()  ---
   */
   class TRawConsole
   {
@@ -33,55 +42,6 @@ namespace me_Console
       TBool PutSegment(me_MemorySegment::TMemorySegment Data);
       TBool PutProgmemSegment(me_MemorySegment::TMemorySegment Data);
   };
-
-  /*
-    Currently "console" is values printer to Serial.
-
-    There are several design ideas.
-
-    First idea is to keep granularity between values.
-    So result from "Print(1); Print(2);" should not be the same
-    as from "Print(12);".
-
-    Second idea is raising level of abstraction for caller.
-    As a user, I don't want to care how exactly number is formatted
-    when printed. I just want to call "Print("millis()");
-    Print(millis());" and see parseable result.
-
-      Also I want inherent indentation. So when "foo()" does
-      "Print("foo:"); Indent(); baz(); Unindent();" and
-      "baz()" does "Print("baz!");", result is like
-
-        foo:
-          baz!
-
-    Print() and Write()
-
-    Print() is fire-and-forget. For argument it supports ints,
-    memory segments and asciiz. They all be printed somehow,
-    with indents and delimiters.
-
-    Write() is a core data printer without delimiters between items.
-    For argument it supports memory segment and asciiz.
-
-    Useful when you printing several items on one line:
-
-      // Produce "Time spent: 0000000029"
-      Write("Time spent:");
-      Print(millis());
-
-    Float numbers are not supported, no need (yet?).
-
-    Integer numbers are represented in decimal ASCII with leading
-    zeroes. Signed integers always have "-" or "+" before value.
-    Zero of signed type is represented with "+" sign.
-
-    So "Print((TUint_2) 42)" will produce "00042".
-
-    This allows us to parse integers back to original types.
-    Also fixed-length numbers are neat when you need to estimate
-    length of list of numbers.
-  */
 
   /*
     Item type
@@ -99,6 +59,31 @@ namespace me_Console
     Nothing
   };
 
+  /*
+    Text console
+
+    Functional scope
+
+      Provide implicit indentation and values delimiting.
+
+    Supported data types:
+
+      * Integer types (6 types, TUint_1, TSint_1, ..., TSint_4)
+      * Memory segment (TMemorySegment)
+      * Constant strings (TAsciiz)
+
+    Supported methods:
+
+      (
+        Print
+        Write (no indentation and delimiting)
+        EndLine
+      )
+      (
+        Indent
+        Unindent
+      )
+  */
   class TConsole : public TRawConsole
   {
     public:
