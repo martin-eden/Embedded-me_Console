@@ -1,4 +1,4 @@
-// Serial console interface
+// UART text console
 
 /*
   Author: Martin Eden
