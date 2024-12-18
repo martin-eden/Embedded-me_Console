@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-15
+  Last mod.: 2024-12-18
 */
 
 #pragma once
@@ -102,6 +102,12 @@ namespace me_Console
 
       // ) Write
 
+      // ( Read data
+
+      TUint_2 ReadSegment(me_MemorySegment::TMemorySegment Data);
+
+      // ) Read data
+
       // ( Print data on standalone line
 
       // Data is memory segment
@@ -169,8 +175,14 @@ namespace me_Console
     // Print program memory contents
     TBool PrintProgmem(me_MemorySegment::TMemorySegment);
 
-    // Print unit
-    void PrintUnit(TUnit Unit);
+    // Print byte
+    void PrintByte(TUint_1 Byte);
+
+    // Read data into memory segment
+    TUint_2 ReadSegment(me_MemorySegment::TMemorySegment Data);
+
+    // Read unit
+    TBool ReadByte(TUint_1 * Byte);
   }
 }
 

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-15
+  Last mod.: 2024-12-18
 */
 
 #include "me_Console.h"
@@ -11,6 +11,7 @@
 #include <me_MemorySegment.h> // TMemorySegment, iterator
 #include <me_FlashMemory.h> // ReadByte()
 #include <me_Uart.h> // SendByte()
+#include <me_WorkMemory.h> // SetByte()
 
 using namespace me_Console;
 
@@ -123,13 +124,13 @@ void TConsole::Write(
 )
 {
   using
-    me_Console::Freetown::PrintUnit;
+    me_Console::Freetown::PrintByte;
 
   TItemType ItemType = TItemType::Chunk;
 
   PrintDelimiterBefore(ItemType);
 
-  PrintUnit(Unit);
+  PrintByte(Unit);
 
   LastItemType = ItemType;
 }
@@ -143,12 +144,12 @@ void TConsole::Print(
 {
   using
     me_Console::Freetown::PrintMem,
-    me_Console::Freetown::PrintUnit;
+    me_Console::Freetown::PrintByte;
 
   PrintDelimiterBefore(TItemType::Line);
 
   PrintMem(MemSeg);
-  PrintUnit('\n');
+  PrintByte('\n');
 
   LastItemType = TItemType::Nothing;
 }
@@ -162,12 +163,12 @@ void TConsole::PrintFlash(
 {
   using
     me_Console::Freetown::PrintProgmem,
-    me_Console::Freetown::PrintUnit;
+    me_Console::Freetown::PrintByte;
 
   PrintDelimiterBefore(TItemType::Line);
 
   PrintProgmem(FlashSeg);
-  PrintUnit('\n');
+  PrintByte('\n');
 
   LastItemType = TItemType::Nothing;
 }
@@ -200,6 +201,12 @@ void TConsole::EndLine()
   }
 }
 
+TUint_2 TConsole::ReadSegment(
+  me_MemorySegment::TMemorySegment Data
+)
+{
+  return Freetown::ReadSegment(Data);
+}
 
 /*
   Print()'s for TUint_1, ..., TSint_4 are in "NumberPrinting.cpp".
@@ -225,7 +232,7 @@ void me_Console::Freetown::PrintDelimiter(
 )
 {
   using
-    me_Console::Freetown::PrintUnit;
+    me_Console::Freetown::PrintByte;
 
   TBool WriteNothing = false;
   TBool WriteSpace = false;
@@ -279,9 +286,9 @@ void me_Console::Freetown::PrintDelimiter(
   if (WriteNothing)
     ;
   else if (WriteSpace)
-    PrintUnit(' ');
+    PrintByte(' ');
   else if (WriteNewline)
-    PrintUnit('\n');
+    PrintByte('\n');
 }
 
 /*
@@ -305,7 +312,7 @@ void me_Console::Freetown::PrintIndent(
 )
 {
   using
-    me_Console::Freetown::PrintUnit;
+    me_Console::Freetown::PrintByte;
 
   TBool DoIt = false;
 
@@ -360,10 +367,32 @@ void me_Console::Freetown::PrintIndent(
   {
     for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
     {
-      PrintUnit(' ');
-      PrintUnit(' ');
+      PrintByte(' ');
+      PrintByte(' ');
     }
   }
+}
+
+/*
+  Print byte
+
+  Surprisingly useful function when you want to isolate your output.
+*/
+void me_Console::Freetown::PrintByte(
+  TUint_1 Byte
+)
+{
+  me_Uart::SendByte(Byte);
+}
+
+/*
+  Read byte
+*/
+TBool me_Console::Freetown::ReadByte(
+  TUint_1 * Byte
+)
+{
+  return me_Uart::GetByte(Byte);
 }
 
 /*
@@ -374,31 +403,35 @@ void me_Console::Freetown::PrintMem(
 )
 {
   using
-    me_Console::Freetown::PrintUnit;
+    me_WorkMemory::GetByte,
+    me_Console::Freetown::PrintByte;
 
   TSegmentIterator Rator;
   TAddress Addr;
-  TUnit Unit;
+  TUint_1 Byte;
 
   if (!Rator.Init(MemSeg))
     return;
 
   while (Rator.GetNext(&Addr))
   {
-    Unit = *((TUnit *) Addr);
-    PrintUnit(Unit);
+    if (!GetByte(&Byte, Addr))
+      return;
+
+    PrintByte(Byte);
   }
 }
 
 /*
-  Print program memory segment contents
+  Print segment of program memory
 */
 TBool me_Console::Freetown::PrintProgmem(
   TMemorySegment FlashSeg
 )
 {
   using
-    me_FlashMemory::GetByte;
+    me_FlashMemory::GetByte,
+    me_Console::Freetown::PrintByte;
 
   TSegmentIterator Rator;
   TAddress Addr;
@@ -412,22 +445,49 @@ TBool me_Console::Freetown::PrintProgmem(
     if (!GetByte(&Byte, Addr))
       return false;
 
-    PrintUnit((TUnit) Byte);
+    PrintByte(Byte);
   }
 
   return true;
 }
 
 /*
-  Print character
+  Read data into memory segment
 
-  Surprisingly useful function when you want to isolate your output.
+  Maximum data that can be read is segment capacity.
+
+  Returns number of units (bytes) read.
+
+  This function is the opposite of PrintMemory().
+  So there is no special treatment for space characters in data.
 */
-void me_Console::Freetown::PrintUnit(
-  TUnit Unit
+TUint_2 me_Console::Freetown::ReadSegment(
+  TMemorySegment Data
 )
 {
-  me_Uart::SendByte(Unit);
+  using
+    me_Uart::GetByte,
+    me_WorkMemory::SetByte;
+
+  me_MemorySegment::TSegmentIterator Rator;
+  TAddress Addr;
+  TUint_1 Byte;
+  TUint_2 NumBytesProcessed = 0;
+
+  Rator.Init(Data);
+
+  while (Rator.GetNext(&Addr))
+  {
+    if (!GetByte(&Byte))
+      break;
+
+    if (!SetByte(Byte, Addr))
+      break;
+
+    ++NumBytesProcessed;
+  }
+
+  return NumBytesProcessed;
 }
 
 // ) Freetown
@@ -441,4 +501,5 @@ me_Console::TConsole Console;
   2024-10 ######
   2024-12-12
   2024-12-15
+  2024-12-18
 */
