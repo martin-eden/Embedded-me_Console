@@ -1,3 +1,10 @@
+// Printing integer types in decimal ASCII
+
+/*
+  Author: Martin Eden
+  Last mod.: 2024-12-18
+*/
+
 /*
   Very boring code.
 
@@ -10,14 +17,7 @@
   We promised to provide overridden Print() for each of them.
 */
 
-/*
-  Author: Martin Eden
-  Last mod.: 2024-10-17
-*/
-
-#include "me_Console.h"
-
-#include <me_BaseTypes.h>
+#include <me_Console.h>
 
 #include <me_MemorySegment.h> // TMemorySegment
 #include <me_String.h> // FormatUint_4(), FormatSint_4()
@@ -69,10 +69,10 @@ void TConsole::Print(
 
     FormatUint_4(BuffSeg, Value);
 
-    Freetown::PrintMem(BuffSeg);
+    PutSegment(BuffSeg);
   }
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
@@ -95,10 +95,10 @@ void TConsole::Print(
 
     FormatUint_4(BuffSeg, (TUint_4) Value);
 
-    Freetown::PrintMem(BuffSeg);
+    PutSegment(BuffSeg);
   }
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
@@ -119,10 +119,10 @@ void TConsole::Print(
 
     FormatUint_4(BuffSeg, (TUint_4) Value);
 
-    Freetown::PrintMem(BuffSeg);
+    PutSegment(BuffSeg);
   }
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
@@ -143,10 +143,10 @@ void TConsole::Print(
 
     FormatSint_4(BuffSeg, Value);
 
-    Freetown::PrintMem(BuffSeg);
+    PutSegment(BuffSeg);
   }
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
@@ -167,10 +167,10 @@ void TConsole::Print(
 
     FormatSint_4(BuffSeg, (TSint_4) Value);
 
-    Freetown::PrintMem(BuffSeg);
+    PutSegment(BuffSeg);
   }
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
@@ -191,12 +191,13 @@ void TConsole::Print(
 
     FormatSint_4(BuffSeg, (TSint_4) Value);
 
-    Freetown::PrintMem(BuffSeg);
+    PutSegment(BuffSeg);
   }
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
   2024-10-17
+  2024-12-18
 */

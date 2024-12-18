@@ -13,6 +13,28 @@
 namespace me_Console
 {
   /*
+    Raw console
+
+    We're reading and writing data to/from memory from/to UART without
+    processing.
+
+    Two base data types:
+
+      * byte (TUint_1)
+      * region of bytes (TMemorySegment)
+  */
+  class TRawConsole
+  {
+    public:
+      TBool GetByte(TUint_1 * Byte);
+      TBool PutByte(TUint_1 Byte);
+
+      TUint_2 GetSegment(me_MemorySegment::TMemorySegment Data);
+      TBool PutSegment(me_MemorySegment::TMemorySegment Data);
+      TBool PutProgmemSegment(me_MemorySegment::TMemorySegment Data);
+  };
+
+  /*
     Currently "console" is values printer to Serial.
 
     There are several design ideas.
@@ -77,7 +99,7 @@ namespace me_Console
     Nothing
   };
 
-  class TConsole
+  class TConsole : public TRawConsole
   {
     public:
       // ( Indents!
@@ -101,12 +123,6 @@ namespace me_Console
       void WriteFlash(me_MemorySegment::TMemorySegment Data);
 
       // ) Write
-
-      // ( Read data
-
-      TUint_2 ReadSegment(me_MemorySegment::TMemorySegment Data);
-
-      // ) Read data
 
       // ( Print data on standalone line
 
@@ -144,46 +160,22 @@ namespace me_Console
         Internal mechanics to avoid double spaces and heading/trailing
         spaces in output.
       */
+
       // Last item type
-      TItemType LastItemType = TItemType::Nothing;
+      TItemType PrevItemType = TItemType::Nothing;
 
       // Indentation level
       TUint_1 IndentLev = 0;
 
+      // Print delimiter
+      void PrintDelimiter(TItemType CurItemType);
+
+      // Print indentation
+      void PrintIndent(TItemType CurItemType);
+
       // Print delimiter and maybe indent before item
       void PrintDelimiterBefore(TItemType CurItemType);
   };
-
-  namespace Freetown
-  {
-    // Print indentation
-    void PrintIndent(
-      TUint_1 IndentLev,
-      TItemType PrevItemType,
-      TItemType CurItemType
-    );
-
-    // Print delimiter
-    void PrintDelimiter(
-      TItemType PrevItemType,
-      TItemType CurItemType
-    );
-
-    // Print memory contents
-    void PrintMem(me_MemorySegment::TMemorySegment);
-
-    // Print program memory contents
-    TBool PrintProgmem(me_MemorySegment::TMemorySegment);
-
-    // Print byte
-    void PrintByte(TUint_1 Byte);
-
-    // Read data into memory segment
-    TUint_2 ReadSegment(me_MemorySegment::TMemorySegment Data);
-
-    // Read unit
-    TBool ReadByte(TUint_1 * Byte);
-  }
 }
 
 /*
@@ -200,4 +192,5 @@ extern me_Console::TConsole Console;
   2024-10 ######
   2024-12-12
   2024-12-15
+  2024-12-18
 */

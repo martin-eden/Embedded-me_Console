@@ -5,13 +5,9 @@
   Last mod.: 2024-12-18
 */
 
-#include "me_Console.h"
+#include <me_Console.h>
 
-#include <me_BaseTypes.h>
 #include <me_MemorySegment.h> // TMemorySegment, iterator
-#include <me_FlashMemory.h> // ReadByte()
-#include <me_Uart.h> // SendByte()
-#include <me_WorkMemory.h> // SetByte()
 
 using namespace me_Console;
 
@@ -55,14 +51,10 @@ void TConsole::PrintDelimiterBefore(
   TItemType CurItemType
 )
 {
-  using
-    me_Console::Freetown::PrintDelimiter,
-    me_Console::Freetown::PrintIndent;
-
   // Print closing delimiter for previous item
-  PrintDelimiter(LastItemType, CurItemType);
+  PrintDelimiter(CurItemType);
   // Print indentation for current item
-  PrintIndent(IndentLev, LastItemType, CurItemType);
+  PrintIndent(CurItemType);
 }
 
 /*
@@ -72,16 +64,13 @@ void TConsole::Write(
   TMemorySegment MemSeg
 )
 {
-  using
-    me_Console::Freetown::PrintMem;
-
   TItemType ItemType = TItemType::Chunk;
 
   PrintDelimiterBefore(ItemType);
 
-  PrintMem(MemSeg);
+  PutSegment(MemSeg);
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
@@ -91,16 +80,13 @@ void TConsole::WriteFlash(
   TMemorySegment FlashSeg
 )
 {
-  using
-    me_Console::Freetown::PrintProgmem;
-
   TItemType ItemType = TItemType::Chunk;
 
   PrintDelimiterBefore(ItemType);
 
-  PrintProgmem(FlashSeg);
+  PutProgmemSegment(FlashSeg);
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
@@ -123,16 +109,13 @@ void TConsole::Write(
   TUnit Unit
 )
 {
-  using
-    me_Console::Freetown::PrintByte;
-
   TItemType ItemType = TItemType::Chunk;
 
   PrintDelimiterBefore(ItemType);
 
-  PrintByte(Unit);
+  PutByte(Unit);
 
-  LastItemType = ItemType;
+  PrevItemType = ItemType;
 }
 
 /*
@@ -142,16 +125,12 @@ void TConsole::Print(
   TMemorySegment MemSeg
 )
 {
-  using
-    me_Console::Freetown::PrintMem,
-    me_Console::Freetown::PrintByte;
-
   PrintDelimiterBefore(TItemType::Line);
 
-  PrintMem(MemSeg);
-  PrintByte('\n');
+  PutSegment(MemSeg);
+  PutByte('\n');
 
-  LastItemType = TItemType::Nothing;
+  PrevItemType = TItemType::Nothing;
 }
 
 /*
@@ -161,16 +140,12 @@ void TConsole::PrintFlash(
   TMemorySegment FlashSeg
 )
 {
-  using
-    me_Console::Freetown::PrintProgmem,
-    me_Console::Freetown::PrintByte;
-
   PrintDelimiterBefore(TItemType::Line);
 
-  PrintProgmem(FlashSeg);
-  PrintByte('\n');
+  PutProgmemSegment(FlashSeg);
+  PutByte('\n');
 
-  LastItemType = TItemType::Nothing;
+  PrevItemType = TItemType::Nothing;
 }
 
 /*
@@ -191,21 +166,8 @@ void TConsole::Print(
 */
 void TConsole::EndLine()
 {
-  using
-    me_Console::Freetown::PrintDelimiter;
-
-  if (LastItemType != TItemType::Nothing)
-  {
-    PrintDelimiter(LastItemType, TItemType::Line);
-    LastItemType = TItemType::Nothing;
-  }
-}
-
-TUint_2 TConsole::ReadSegment(
-  me_MemorySegment::TMemorySegment Data
-)
-{
-  return Freetown::ReadSegment(Data);
+  PrintDelimiter(TItemType::Line);
+  PrevItemType = TItemType::Nothing;
 }
 
 /*
@@ -226,14 +188,10 @@ TUint_2 TConsole::ReadSegment(
   Number  | " "   \n   " "    ""
   Nothing | ""    ""   ""     ""
 */
-void me_Console::Freetown::PrintDelimiter(
-  TItemType PrevItemType,
+void TConsole::PrintDelimiter(
   TItemType CurItemType
 )
 {
-  using
-    me_Console::Freetown::PrintByte;
-
   TBool WriteNothing = false;
   TBool WriteSpace = false;
   TBool WriteNewline = false;
@@ -286,9 +244,9 @@ void me_Console::Freetown::PrintDelimiter(
   if (WriteNothing)
     ;
   else if (WriteSpace)
-    PrintByte(' ');
+    PutByte(' ');
   else if (WriteNewline)
-    PrintByte('\n');
+    PutByte('\n');
 }
 
 /*
@@ -305,15 +263,10 @@ void me_Console::Freetown::PrintDelimiter(
   Nothing |   +     +     +      -
 
 */
-void me_Console::Freetown::PrintIndent(
-  TUint_1 IndentLev,
-  TItemType PrevItemType,
+void TConsole::PrintIndent(
   TItemType CurItemType
 )
 {
-  using
-    me_Console::Freetown::PrintByte;
-
   TBool DoIt = false;
 
   {
@@ -367,127 +320,10 @@ void me_Console::Freetown::PrintIndent(
   {
     for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
     {
-      PrintByte(' ');
-      PrintByte(' ');
+      PutByte(' ');
+      PutByte(' ');
     }
   }
-}
-
-/*
-  Print byte
-
-  Surprisingly useful function when you want to isolate your output.
-*/
-void me_Console::Freetown::PrintByte(
-  TUint_1 Byte
-)
-{
-  me_Uart::SendByte(Byte);
-}
-
-/*
-  Read byte
-*/
-TBool me_Console::Freetown::ReadByte(
-  TUint_1 * Byte
-)
-{
-  return me_Uart::GetByte(Byte);
-}
-
-/*
-  Print memory segment contents
-*/
-void me_Console::Freetown::PrintMem(
-  TMemorySegment MemSeg
-)
-{
-  using
-    me_WorkMemory::GetByte,
-    me_Console::Freetown::PrintByte;
-
-  TSegmentIterator Rator;
-  TAddress Addr;
-  TUint_1 Byte;
-
-  if (!Rator.Init(MemSeg))
-    return;
-
-  while (Rator.GetNext(&Addr))
-  {
-    if (!GetByte(&Byte, Addr))
-      return;
-
-    PrintByte(Byte);
-  }
-}
-
-/*
-  Print segment of program memory
-*/
-TBool me_Console::Freetown::PrintProgmem(
-  TMemorySegment FlashSeg
-)
-{
-  using
-    me_FlashMemory::GetByte,
-    me_Console::Freetown::PrintByte;
-
-  TSegmentIterator Rator;
-  TAddress Addr;
-  TUint_1 Byte;
-
-  if (!Rator.Init(FlashSeg))
-    return false;
-
-  while (Rator.GetNext(&Addr))
-  {
-    if (!GetByte(&Byte, Addr))
-      return false;
-
-    PrintByte(Byte);
-  }
-
-  return true;
-}
-
-/*
-  Read data into memory segment
-
-  Maximum data that can be read is segment capacity.
-
-  Returns number of units (bytes) read.
-
-  This function is the opposite of PrintMemory().
-  So there is no special treatment for space characters in data.
-*/
-TUint_2 me_Console::Freetown::ReadSegment(
-  TMemorySegment Data
-)
-{
-  using
-    me_Uart::GetByte,
-    me_WorkMemory::SetByte;
-
-  me_MemorySegment::TSegmentIterator Rator;
-  TAddress Addr;
-  TUint_1 Byte;
-  TUint_2 NumBytesProcessed = 0;
-
-  Rator.Init(Data);
-
-  while (Rator.GetNext(&Addr))
-  {
-    if (!GetByte(&Byte))
-      break;
-
-    if (!SetByte(Byte, Addr))
-      break;
-
-    ++NumBytesProcessed;
-  }
-
-  return NumBytesProcessed;
 }
 
 // ) Freetown
