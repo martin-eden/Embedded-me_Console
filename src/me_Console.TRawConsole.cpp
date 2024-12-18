@@ -8,7 +8,7 @@
 #include <me_Console.h>
 
 #include <me_WorkMemory.h>
-#include <me_FlashMemory.h>
+#include <me_ProgramMemory.h>
 #include <me_Uart.h>
 #include <me_MemorySegment.h>
 
@@ -109,7 +109,7 @@ TBool TRawConsole::PutProgmemSegment(
 
   while (Rator.GetNext(&Addr))
   {
-    if (!me_FlashMemory::GetByte(&Byte, Addr))
+    if (!me_ProgramMemory::GetByte(&Byte, Addr))
       return false;
 
     PutByte(Byte);
