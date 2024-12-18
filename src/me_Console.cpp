@@ -12,8 +12,7 @@
 using namespace me_Console;
 
 using
-  me_MemorySegment::TMemorySegment,
-  me_MemorySegment::TSegmentIterator;
+  me_MemorySegment::TMemorySegment;
 
 // Max byte value. I need to move such lame constants somewhere
 const TUint_1 Max_Uint_1 = 0xFF;
@@ -68,7 +67,7 @@ void TConsole::Write(
 
   PrintDelimiterBefore(ItemType);
 
-  PutSegment(MemSeg);
+  RawConsole.PutSegment(MemSeg);
 
   PrevItemType = ItemType;
 }
@@ -84,7 +83,7 @@ void TConsole::WriteFlash(
 
   PrintDelimiterBefore(ItemType);
 
-  PutProgmemSegment(FlashSeg);
+  RawConsole.PutProgmemSegment(FlashSeg);
 
   PrevItemType = ItemType;
 }
@@ -113,7 +112,7 @@ void TConsole::Write(
 
   PrintDelimiterBefore(ItemType);
 
-  PutByte(Unit);
+  RawConsole.PutByte(Unit);
 
   PrevItemType = ItemType;
 }
@@ -127,8 +126,8 @@ void TConsole::Print(
 {
   PrintDelimiterBefore(TItemType::Line);
 
-  PutSegment(MemSeg);
-  PutByte('\n');
+  RawConsole.PutSegment(MemSeg);
+  RawConsole.PutByte('\n');
 
   PrevItemType = TItemType::Nothing;
 }
@@ -142,8 +141,8 @@ void TConsole::PrintFlash(
 {
   PrintDelimiterBefore(TItemType::Line);
 
-  PutProgmemSegment(FlashSeg);
-  PutByte('\n');
+  RawConsole.PutProgmemSegment(FlashSeg);
+  RawConsole.PutByte('\n');
 
   PrevItemType = TItemType::Nothing;
 }
@@ -244,9 +243,9 @@ void TConsole::PrintDelimiter(
   if (WriteNothing)
     ;
   else if (WriteSpace)
-    PutByte(' ');
+    RawConsole.PutByte(' ');
   else if (WriteNewline)
-    PutByte('\n');
+    RawConsole.PutByte('\n');
 }
 
 /*
@@ -320,13 +319,11 @@ void TConsole::PrintIndent(
   {
     for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
     {
-      PutByte(' ');
-      PutByte(' ');
+      RawConsole.PutByte(' ');
+      RawConsole.PutByte(' ');
     }
   }
 }
-
-// ) Freetown
 
 /*
   Assign instance to shared "extern" global

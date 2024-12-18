@@ -69,7 +69,7 @@ void TConsole::Print(
 
     FormatUint_4(BuffSeg, Value);
 
-    PutSegment(BuffSeg);
+    RawConsole.PutSegment(BuffSeg);
   }
 
   PrevItemType = ItemType;
@@ -95,7 +95,7 @@ void TConsole::Print(
 
     FormatUint_4(BuffSeg, (TUint_4) Value);
 
-    PutSegment(BuffSeg);
+    RawConsole.PutSegment(BuffSeg);
   }
 
   PrevItemType = ItemType;
@@ -119,7 +119,7 @@ void TConsole::Print(
 
     FormatUint_4(BuffSeg, (TUint_4) Value);
 
-    PutSegment(BuffSeg);
+    RawConsole.PutSegment(BuffSeg);
   }
 
   PrevItemType = ItemType;
@@ -143,7 +143,7 @@ void TConsole::Print(
 
     FormatSint_4(BuffSeg, Value);
 
-    PutSegment(BuffSeg);
+    RawConsole.PutSegment(BuffSeg);
   }
 
   PrevItemType = ItemType;
@@ -167,7 +167,7 @@ void TConsole::Print(
 
     FormatSint_4(BuffSeg, (TSint_4) Value);
 
-    PutSegment(BuffSeg);
+    RawConsole.PutSegment(BuffSeg);
   }
 
   PrevItemType = ItemType;
@@ -191,7 +191,7 @@ void TConsole::Print(
 
     FormatSint_4(BuffSeg, (TSint_4) Value);
 
-    PutSegment(BuffSeg);
+    RawConsole.PutSegment(BuffSeg);
   }
 
   PrevItemType = ItemType;

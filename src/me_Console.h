@@ -84,7 +84,7 @@ namespace me_Console
         Unindent
       )
   */
-  class TConsole : public TRawConsole
+  class TConsole
   {
     public:
       // ( Indents!
@@ -145,6 +145,8 @@ namespace me_Console
         Internal mechanics to avoid double spaces and heading/trailing
         spaces in output.
       */
+      // Raw UART I/O
+      TRawConsole RawConsole;
 
       // Last item type
       TItemType PrevItemType = TItemType::Nothing;
