@@ -11,11 +11,11 @@
 #include <me_ProgramMemory.h>
 #include <me_Uart.h>
 #include <me_MemorySegment.h>
+#include <me_SegmentProcessor.h>
 
 using namespace me_Console;
 
 using
-  me_Console::TRawConsole,
   me_MemorySegment::TMemorySegment,
   me_MemorySegment::TSegmentIterator;
 
@@ -56,7 +56,7 @@ TUint_2 TRawConsole::GetSegment(
 
   while (Rator.GetNext(&Addr))
   {
-    if (!GetByte(&Byte))
+    if (!me_Uart::GetByte(&Byte))
       break;
 
     if (!me_WorkMemory::SetByte(Byte, Addr))
@@ -75,22 +75,13 @@ TBool TRawConsole::PutSegment(
   TMemorySegment Data
 )
 {
-  TSegmentIterator Rator;
-  TAddress Addr;
-  TUint_1 Byte;
-
-  if (!Rator.Init(Data))
-    return false;
-
-  while (Rator.GetNext(&Addr))
-  {
-    if (!me_WorkMemory::GetByte(&Byte, Addr))
-      return false;
-
-    PutByte(Byte);
-  }
-
-  return true;
+  return
+    me_SegmentProcessor::CopyFrom(
+      Data,
+      Data,
+      me_WorkMemory::Op_GetByte,
+      me_Uart::Op_PutByte
+    );
 }
 
 /*
@@ -100,22 +91,13 @@ TBool TRawConsole::PutProgmemSegment(
   TMemorySegment Data
 )
 {
-  TSegmentIterator Rator;
-  TAddress Addr;
-  TUint_1 Byte;
-
-  if (!Rator.Init(Data))
-    return false;
-
-  while (Rator.GetNext(&Addr))
-  {
-    if (!me_ProgramMemory::GetByte(&Byte, Addr))
-      return false;
-
-    PutByte(Byte);
-  }
-
-  return true;
+  return
+    me_SegmentProcessor::CopyFrom(
+      Data,
+      Data,
+      me_ProgramMemory::Op_GetByte,
+      me_Uart::Op_PutByte
+    );
 }
 
 /*
