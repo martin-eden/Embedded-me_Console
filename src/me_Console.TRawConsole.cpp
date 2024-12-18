@@ -46,10 +46,6 @@ TUint_2 TRawConsole::GetSegment(
   TMemorySegment Data
 )
 {
-  using
-    me_Uart::GetByte,
-    me_WorkMemory::SetByte;
-
   TSegmentIterator Rator;
   TAddress Addr;
   TUint_1 Byte;
@@ -63,7 +59,7 @@ TUint_2 TRawConsole::GetSegment(
     if (!GetByte(&Byte))
       break;
 
-    if (!SetByte(Byte, Addr))
+    if (!me_WorkMemory::SetByte(Byte, Addr))
       break;
 
     ++NumBytesProcessed;
@@ -79,10 +75,6 @@ TBool TRawConsole::PutSegment(
   TMemorySegment Data
 )
 {
-  using
-    me_WorkMemory::GetByte,
-    me_Uart::SendByte;
-
   TSegmentIterator Rator;
   TAddress Addr;
   TUint_1 Byte;
@@ -92,10 +84,10 @@ TBool TRawConsole::PutSegment(
 
   while (Rator.GetNext(&Addr))
   {
-    if (!GetByte(&Byte, Addr))
+    if (!me_WorkMemory::GetByte(&Byte, Addr))
       return false;
 
-    SendByte(Byte);
+    PutByte(Byte);
   }
 
   return true;
@@ -108,10 +100,6 @@ TBool TRawConsole::PutProgmemSegment(
   TMemorySegment Data
 )
 {
-  using
-    me_FlashMemory::GetByte,
-    me_Uart::SendByte;
-
   TSegmentIterator Rator;
   TAddress Addr;
   TUint_1 Byte;
@@ -121,10 +109,10 @@ TBool TRawConsole::PutProgmemSegment(
 
   while (Rator.GetNext(&Addr))
   {
-    if (!GetByte(&Byte, Addr))
+    if (!me_FlashMemory::GetByte(&Byte, Addr))
       return false;
 
-    SendByte(Byte);
+    PutByte(Byte);
   }
 
   return true;
