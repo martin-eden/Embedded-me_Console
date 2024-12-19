@@ -125,18 +125,8 @@ namespace me_Console
 
       // ( Custom printers for base types
 
-      // Print TUint_1
-      void Print(TUint_1 Uint_1);
-      // Print TUint_2
-      void Print(TUint_2 Uint_2);
-      // Print TUint_4
-      void Print(TUint_4 Uint_4);
-      // Print TSint_1
-      void Print(TSint_1 Sint_1);
-      // Print TSint_2
-      void Print(TSint_2 Sint_2);
-      // Print TSint_4
-      void Print(TSint_4 Sint_4);
+        template <typename TIntType>
+      void Print(TIntType IntValue);
 
       // ) Custom printers
 

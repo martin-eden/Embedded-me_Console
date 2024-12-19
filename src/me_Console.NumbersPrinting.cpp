@@ -24,65 +24,12 @@
 
 using namespace me_Console;
 
-using me_CodecDecInt::Encode;
-
-const TOperation PrintByte = me_Uart::Op_PutByte;
-
-/*
-  Base code will be repeated six times. Difference is type of argument.
-*/
-
-// Print TUint_4
-void TConsole::Print(TUint_4 Value)
+  template <typename IntType>
+void TConsole::Print(IntType IntValue)
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
-  PrevItemType = ItemType;
-}
-
-// Print TUint_2
-void TConsole::Print(TUint_2 Value)
-{
-  TItemType ItemType = TItemType::Number;
-  PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
-  PrevItemType = ItemType;
-}
-
-// Print TUint_1
-void TConsole::Print(TUint_1 Value)
-{
-  TItemType ItemType = TItemType::Number;
-  PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
-  PrevItemType = ItemType;
-}
-
-// Print TSint_4
-void TConsole::Print(TSint_4 Value)
-{
-  TItemType ItemType = TItemType::Number;
-  PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
-  PrevItemType = ItemType;
-}
-
-// Print TSint_2
-void TConsole::Print(TSint_2 Value)
-{
-  TItemType ItemType = TItemType::Number;
-  PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
-  PrevItemType = ItemType;
-}
-
-// Print TSint_1
-void TConsole::Print(TSint_1 Value)
-{
-  TItemType ItemType = TItemType::Number;
-  PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
+  me_CodecDecInt::Encode(IntValue, me_Uart::Op_PutByte);
   PrevItemType = ItemType;
 }
 
