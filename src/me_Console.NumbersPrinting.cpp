@@ -20,15 +20,15 @@
 #include <me_Console.h>
 
 #include <me_MemorySegment.h> // TMemorySegment
-#include <me_String.h> // FormatUint_4(), FormatSint_4()
+#include <me_CodecDecInt.h> // FormatUint_4(), FormatSint_4()
 
 using namespace me_Console;
 
 using
   me_MemorySegment::TMemorySegment,
   me_MemorySegment::Freetown::FromAddrSize,
-  me_String::Freetown::FormatUint_4,
-  me_String::Freetown::FormatSint_4;
+  me_CodecDecInt::FormatUint_4,
+  me_CodecDecInt::FormatSint_4;
 
 /*
   4-bytes signed integer when represented as decimal can take
