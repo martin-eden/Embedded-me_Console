@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-18
+  Last mod.: 2024-12-19
 */
 
 /*
@@ -19,36 +19,15 @@
 
 #include <me_Console.h>
 
-#include <me_MemorySegment.h> // TMemorySegment
-#include <me_CodecDecInt.h> // FormatUint_4(), FormatSint_4()
+#include <me_CodecDecInt.h> // Encode()
+#include <me_Uart.h> // Op_PutByte()
 
 using namespace me_Console;
 
 using
-  me_MemorySegment::TMemorySegment,
-  me_MemorySegment::Freetown::FromAddrSize,
-  me_CodecDecInt::FormatUint_4,
-  me_CodecDecInt::FormatSint_4;
+  me_CodecDecInt::Encode;
 
-/*
-  4-bytes signed integer when represented as decimal can take
-  11 bytes.
-
-  So we need additional memory.
-
-  We can't use heap allocations because heap allocators want to
-  call us for printing. So we're asking compiler to allocate it
-  on stack:
-
-    {
-      TUint_1 Buffer[11];
-    }
-
-  Then we're describing <Buffer> as memory segment and pass it
-  to integers representer and then to printer.
-
-  Code is mostly copy-pasted (what I hate to do).
-*/
+const TOperation PrintByte = me_Uart::Op_PutByte;
 
 /*
   Print TUint_4
@@ -61,16 +40,7 @@ void TConsole::Print(
 
   PrintDelimiterBefore(ItemType);
 
-  // Allocate fixed buffer and represent <Value> there. Print it
-  {
-    TUint_1 BuffSize = 10;
-    TUint_1 Buff[BuffSize];
-    TMemorySegment BuffSeg = FromAddrSize((TUint_2) &Buff, BuffSize);
-
-    FormatUint_4(BuffSeg, Value);
-
-    RawConsole.PutSegment(BuffSeg);
-  }
+  Encode(Value, PrintByte);
 
   PrevItemType = ItemType;
 }
@@ -88,15 +58,7 @@ void TConsole::Print(
 
   PrintDelimiterBefore(ItemType);
 
-  {
-    TUint_1 BuffSize = 5;
-    TUint_1 Buff[BuffSize];
-    TMemorySegment BuffSeg = FromAddrSize((TUint_2) &Buff, BuffSize);
-
-    FormatUint_4(BuffSeg, (TUint_4) Value);
-
-    RawConsole.PutSegment(BuffSeg);
-  }
+  Encode(Value, PrintByte);
 
   PrevItemType = ItemType;
 }
@@ -112,15 +74,7 @@ void TConsole::Print(
 
   PrintDelimiterBefore(ItemType);
 
-  {
-    TUint_1 BuffSize = 3;
-    TUint_1 Buff[BuffSize];
-    TMemorySegment BuffSeg = FromAddrSize((TUint_2) &Buff, BuffSize);
-
-    FormatUint_4(BuffSeg, (TUint_4) Value);
-
-    RawConsole.PutSegment(BuffSeg);
-  }
+  Encode(Value, PrintByte);
 
   PrevItemType = ItemType;
 }
@@ -136,15 +90,7 @@ void TConsole::Print(
 
   PrintDelimiterBefore(ItemType);
 
-  {
-    TUint_1 BuffSize = 11;
-    TUint_1 Buff[BuffSize];
-    TMemorySegment BuffSeg = FromAddrSize((TUint_2) &Buff, BuffSize);
-
-    FormatSint_4(BuffSeg, Value);
-
-    RawConsole.PutSegment(BuffSeg);
-  }
+  Encode(Value, PrintByte);
 
   PrevItemType = ItemType;
 }
@@ -160,15 +106,7 @@ void TConsole::Print(
 
   PrintDelimiterBefore(ItemType);
 
-  {
-    TUint_1 BuffSize = 6;
-    TUint_1 Buff[BuffSize];
-    TMemorySegment BuffSeg = FromAddrSize((TUint_2) &Buff, BuffSize);
-
-    FormatSint_4(BuffSeg, (TSint_4) Value);
-
-    RawConsole.PutSegment(BuffSeg);
-  }
+  Encode(Value, PrintByte);
 
   PrevItemType = ItemType;
 }
@@ -184,15 +122,7 @@ void TConsole::Print(
 
   PrintDelimiterBefore(ItemType);
 
-  {
-    TUint_1 BuffSize = 4;
-    TUint_1 Buff[BuffSize];
-    TMemorySegment BuffSeg = FromAddrSize((TUint_2) &Buff, BuffSize);
-
-    FormatSint_4(BuffSeg, (TSint_4) Value);
-
-    RawConsole.PutSegment(BuffSeg);
-  }
+  Encode(Value, PrintByte);
 
   PrevItemType = ItemType;
 }
