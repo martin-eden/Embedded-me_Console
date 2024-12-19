@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-18
+  Last mod.: 2024-12-19
 */
 
 #pragma once
@@ -105,7 +105,7 @@ namespace me_Console
       // Data is character
       void Write(TUnit Unit);
       // Data is segment in program memory
-      void WriteFlash(me_MemorySegment::TMemorySegment Data);
+      void WriteProgmem(me_MemorySegment::TMemorySegment Data);
 
       // ) Write
 
@@ -116,7 +116,7 @@ namespace me_Console
       // Data is ASCIIZ pointer
       void Print(const TAsciiz Asciiz);
       // Data is segment in program memory
-      void PrintFlash(me_MemorySegment::TMemorySegment Data);
+      void PrintProgmem(me_MemorySegment::TMemorySegment Data);
 
       // ) Print
 
@@ -180,4 +180,5 @@ extern me_Console::TConsole Console;
   2024-12-12
   2024-12-15
   2024-12-18
+  2024-12-19
 */

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-18
+  Last mod.: 2024-12-19
 */
 
 #include <me_Console.h>
@@ -75,15 +75,15 @@ void TConsole::Write(
 /*
   Raw print of program memory contents
 */
-void TConsole::WriteFlash(
-  TMemorySegment FlashSeg
+void TConsole::WriteProgmem(
+  TMemorySegment ProgmemSeg
 )
 {
   TItemType ItemType = TItemType::Chunk;
 
   PrintDelimiterBefore(ItemType);
 
-  RawConsole.PutProgmemSegment(FlashSeg);
+  RawConsole.PutProgmemSegment(ProgmemSeg);
 
   PrevItemType = ItemType;
 }
@@ -135,13 +135,13 @@ void TConsole::Print(
 /*
   Print segment from program memory
 */
-void TConsole::PrintFlash(
-  TMemorySegment FlashSeg
+void TConsole::PrintProgmem(
+  TMemorySegment ProgmemSeg
 )
 {
   PrintDelimiterBefore(TItemType::Line);
 
-  RawConsole.PutProgmemSegment(FlashSeg);
+  RawConsole.PutProgmemSegment(ProgmemSeg);
   RawConsole.PutByte('\n');
 
   PrevItemType = TItemType::Nothing;
