@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-19
+  Last mod.: 2025-08-14
 */
 
 #include <me_Console.h>
@@ -159,6 +159,29 @@ void TConsole::Print(
 
   Print(FromAsciiz(Asciiz));
 }
+
+/*
+  Print boolean value
+*/
+void TConsole::Print(
+  TBool IsTrue
+)
+{
+  using
+    me_MemorySegment::Freetown::FromAsciiz;
+
+  PrintDelimiterBefore(TItemType::Number);
+
+  if (IsTrue)
+    RawConsole.PutSegment(FromAsciiz("YES"));
+  else
+    RawConsole.PutSegment(FromAsciiz("NO"));
+
+  PrevItemType = TItemType::Number;
+}
+
+
+// Printers for integers are in separate file
 
 /*
   Print newline if not on empty line
@@ -331,8 +354,7 @@ void TConsole::PrintIndent(
 me_Console::TConsole Console;
 
 /*
-  2024-10 ######
-  2024-12-12
-  2024-12-15
-  2024-12-18
+  2024-10 # # # # # #
+  2024-12 # # #
+  2025-08-14
 */

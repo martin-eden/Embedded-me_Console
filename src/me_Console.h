@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-19
+  Last mod.: 2025-08-14
 */
 
 #pragma once
@@ -137,6 +137,8 @@ namespace me_Console
       void Print(TSint_2 Sint_2);
       // Print TSint_4
       void Print(TSint_4 Sint_4);
+      // Print TBool
+      void Print(TBool Bool);
 
       // ) Custom printers
 
@@ -176,9 +178,7 @@ namespace me_Console
 extern me_Console::TConsole Console;
 
 /*
-  2024-10 ######
-  2024-12-12
-  2024-12-15
-  2024-12-18
-  2024-12-19
+  2024-10 # # # # # #
+  2024-12 # # # #
+  2025-08-14 TBool printing
 */
