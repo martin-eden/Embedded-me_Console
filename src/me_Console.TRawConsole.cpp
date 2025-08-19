@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-18
+  Last mod.: 2025-08-19
 */
 
 #include <me_Console.h>
@@ -59,7 +59,7 @@ TUint_2 TRawConsole::GetSegment(
     if (!me_Uart::GetByte(&Byte))
       break;
 
-    if (!me_WorkMemory::SetByte(Byte, Addr))
+    if (!me_WorkMemory::SetByteTo(Addr, Byte))
       break;
 
     ++NumBytesProcessed;
