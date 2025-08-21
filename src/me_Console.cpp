@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-14
+  Last mod.: 2025-08-21
 */
 
 #include <me_Console.h>
@@ -14,17 +14,26 @@ using namespace me_Console;
 using
   me_MemorySegment::TMemorySegment;
 
-// Max byte value. I need to move such lame constants somewhere
-const TUint_1 Max_Uint_1 = 0xFF;
+/*
+  Setup. Optional
+
+  Setup UART to typical speed.
+*/
+void TConsole::Init()
+{
+  RawConsole.Init();
+}
 
 /*
   Increase indent
 
-  Indent is increased up to certain hardcoded limit.
+  Indent is increased up to certain limit.
 */
 void TConsole::Indent()
 {
-  if (IndentLev == Max_Uint_1)
+  const TUint_1 MaxIndent = 50;
+
+  if (IndentLev == MaxIndent)
     return;
 
   ++IndentLev;

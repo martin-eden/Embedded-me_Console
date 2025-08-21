@@ -1,0 +1,22 @@
+( void me_Console::Init()
+
+  Why?
+
+  My sketches are plagued with
+
+    #include <me_Uart.h>
+    #include <me_Console.h>
+    ..
+    me_Uart::Init(me_Uart::Speed_115k_Bps)
+    Console.Print("Hello there.");
+
+  but they just want to use Console.
+
+  So I've added Init() to replace that "#include" and "me_Uart::Init(..)"
+  with "Console.Init()".
+
+  We still respect UART as separate device like printer.
+  You can set up UART to 9600 baud or do some other things.
+  Console methods are agnostic to this.
+
+) 2025-08-21

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-19
+  Last mod.: 2025-08-21
 */
 
 #include <me_Console.h>
@@ -18,6 +18,14 @@ using namespace me_Console;
 using
   me_MemorySegment::TMemorySegment,
   me_MemorySegment::TSegmentIterator;
+
+/*
+  Setup UART to typical speed
+*/
+TBool TRawConsole::Init()
+{
+  return me_Uart::Init(me_Uart::Speed_115k_Bps);
+}
 
 TBool TRawConsole::GetByte(
   TUint_1 * Byte

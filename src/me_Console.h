@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-14
+  Last mod.: 2025-08-21
 */
 
 #pragma once
@@ -15,26 +15,24 @@ namespace me_Console
   /*
     Raw console
 
-    We're reading and writing data to/from memory from/to UART without
-    processing.
+    Internal interface to read/write data.
 
     Base data types:
 
       * byte (TUint_1)
       * memory segment (TMemorySegment)
-      * program memory segment (TMemorySegment also)
 
-    Supported input/output:
+    Supported directions:
 
-            Output > | Memory    UART
-      --Input--------+----------------------
-              Memory |  ---      Put..()
-      Program memory |  ---      PutProgmem..()
-                UART |  Get..()  ---
+      UART -> RAM: Get..()
+      RAM -> UART: Put..()
+      Flash -> UART: PutProgmem..()
   */
   class TRawConsole
   {
     public:
+      TBool Init();
+
       TBool GetByte(TUint_1 * Byte);
       TBool PutByte(TUint_1 Byte);
 
@@ -46,10 +44,9 @@ namespace me_Console
   /*
     Item type
 
-    Used in detection what delimiter we should emit between two
-    items.
+    Internal
 
-    Can be "chunk", "line", "number" or "nothing".
+    Used in detection what delimiter we should emit between two items.
   */
   enum TItemType
   {
@@ -62,21 +59,20 @@ namespace me_Console
   /*
     Text console
 
-    Functional scope
-
-      Provide implicit indentation and values delimiting.
+    Provides built-in indentation and delimiting.
 
     Supported data types:
 
-      * Integer types (6 types, TUint_1, TSint_1, ..., TSint_4)
+      * Boolean
+      * Integers
       * Memory segment (TMemorySegment)
       * Constant strings (TAsciiz)
 
     Supported methods:
 
       (
-        Print
-        Write (no indentation and delimiting)
+        Print (prints newlines after strings, spaces after numbers)
+        Write (no newlines after strings, spaces after numbers)
         EndLine
       )
       (
@@ -87,6 +83,9 @@ namespace me_Console
   class TConsole
   {
     public:
+      // Setup UART to typical speed. Optional
+      void Init();
+
       // ( Indents!
 
       // Increase indent
@@ -94,7 +93,7 @@ namespace me_Console
       // Decrease indent
       void Unindent();
 
-      // ) Indents!
+      // )
 
       // ( Write data
 
@@ -107,7 +106,7 @@ namespace me_Console
       // Data is segment in program memory
       void WriteProgmem(me_MemorySegment::TMemorySegment Data);
 
-      // ) Write
+      // )
 
       // ( Print data on standalone line
 
@@ -118,7 +117,7 @@ namespace me_Console
       // Data is segment in program memory
       void PrintProgmem(me_MemorySegment::TMemorySegment Data);
 
-      // ) Print
+      // )
 
       // Print newline if not on empty line
       void EndLine();
@@ -140,7 +139,7 @@ namespace me_Console
       // Print TBool
       void Print(TBool Bool);
 
-      // ) Custom printers
+      // )
 
     private:
       /*
@@ -181,4 +180,5 @@ extern me_Console::TConsole Console;
   2024-10 # # # # # #
   2024-12 # # # #
   2025-08-14 TBool printing
+  2025-08-21 Init()
 */
