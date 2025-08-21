@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-19
+  Last mod.: 2025-08-21
 */
 
 /*
@@ -26,7 +26,7 @@ using namespace me_Console;
 
 using me_CodecDecInt::Encode;
 
-const TOperation PrintByte = me_Uart::Op_PutByte;
+const TOperation SendByte = me_Uart::Op_PutByte;
 
 /*
   Base code will be repeated six times. Difference is type of argument.
@@ -37,7 +37,7 @@ void TConsole::Print(TUint_4 Value)
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
+  Encode(Value, SendByte);
   PrevItemType = ItemType;
 }
 
@@ -46,7 +46,7 @@ void TConsole::Print(TUint_2 Value)
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
+  Encode(Value, SendByte);
   PrevItemType = ItemType;
 }
 
@@ -55,7 +55,7 @@ void TConsole::Print(TUint_1 Value)
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
+  Encode(Value, SendByte);
   PrevItemType = ItemType;
 }
 
@@ -64,7 +64,7 @@ void TConsole::Print(TSint_4 Value)
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
+  Encode(Value, SendByte);
   PrevItemType = ItemType;
 }
 
@@ -73,7 +73,7 @@ void TConsole::Print(TSint_2 Value)
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
+  Encode(Value, SendByte);
   PrevItemType = ItemType;
 }
 
@@ -82,7 +82,7 @@ void TConsole::Print(TSint_1 Value)
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, PrintByte);
+  Encode(Value, SendByte);
   PrevItemType = ItemType;
 }
 

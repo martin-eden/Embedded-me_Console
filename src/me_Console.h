@@ -24,21 +24,21 @@ namespace me_Console
 
     Supported directions:
 
-      UART -> RAM: Get..()
-      RAM -> UART: Put..()
-      Flash -> UART: PutProgmem..()
+      UART -> RAM: Receive..()
+      RAM -> UART: Send..()
+      Flash -> UART: EmitProgmem..()
   */
   class TRawConsole
   {
     public:
       TBool Init();
 
-      TBool GetByte(TUint_1 * Byte);
-      TBool PutByte(TUint_1 Byte);
+      TBool ReceiveByte(TUint_1 * Byte);
+      TBool SendByte(TUint_1 Byte);
 
-      TUint_2 GetSegment(me_MemorySegment::TMemorySegment Data);
-      TBool PutSegment(me_MemorySegment::TMemorySegment Data);
-      TBool PutProgmemSegment(me_MemorySegment::TMemorySegment Data);
+      TUint_2 ReceiveSegment(me_MemorySegment::TMemorySegment Data);
+      TBool SendSegment(me_MemorySegment::TMemorySegment Data);
+      TBool SendProgmemSegment(me_MemorySegment::TMemorySegment Data);
   };
 
   /*

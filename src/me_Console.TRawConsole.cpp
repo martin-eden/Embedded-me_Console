@@ -7,9 +7,9 @@
 
 #include <me_Console.h>
 
+#include <me_Uart.h>
 #include <me_WorkMemory.h>
 #include <me_ProgramMemory.h>
-#include <me_Uart.h>
 #include <me_MemorySegment.h>
 #include <me_SegmentProcessor.h>
 
@@ -27,14 +27,20 @@ TBool TRawConsole::Init()
   return me_Uart::Init(me_Uart::Speed_115k_Bps);
 }
 
-TBool TRawConsole::GetByte(
+/*
+  Read byte from UART
+*/
+TBool TRawConsole::ReceiveByte(
   TUint_1 * Byte
 )
 {
   return me_Uart::GetByte(Byte);
 }
 
-TBool TRawConsole::PutByte(
+/*
+  Write byte to UART
+*/
+TBool TRawConsole::SendByte(
   TUint_1 Byte
 )
 {
@@ -50,7 +56,7 @@ TBool TRawConsole::PutByte(
 
   Returns number of units (bytes) read.
 */
-TUint_2 TRawConsole::GetSegment(
+TUint_2 TRawConsole::ReceiveSegment(
   TMemorySegment Data
 )
 {
@@ -77,9 +83,9 @@ TUint_2 TRawConsole::GetSegment(
 }
 
 /*
-  Send data from memory segment to UART
+  Send data segment from memory to UART
 */
-TBool TRawConsole::PutSegment(
+TBool TRawConsole::SendSegment(
   TMemorySegment Data
 )
 {
@@ -93,9 +99,9 @@ TBool TRawConsole::PutSegment(
 }
 
 /*
-  Send data from segment in program memory to UART
+  Send data from program memory segment to UART
 */
-TBool TRawConsole::PutProgmemSegment(
+TBool TRawConsole::SendProgmemSegment(
   TMemorySegment Data
 )
 {
@@ -110,4 +116,5 @@ TBool TRawConsole::PutProgmemSegment(
 
 /*
   2024-12-18
+  2025-08-21
 */

@@ -76,7 +76,7 @@ void TConsole::Write(
 
   PrintDelimiterBefore(ItemType);
 
-  RawConsole.PutSegment(MemSeg);
+  RawConsole.SendSegment(MemSeg);
 
   PrevItemType = ItemType;
 }
@@ -92,7 +92,7 @@ void TConsole::WriteProgmem(
 
   PrintDelimiterBefore(ItemType);
 
-  RawConsole.PutProgmemSegment(ProgmemSeg);
+  RawConsole.SendProgmemSegment(ProgmemSeg);
 
   PrevItemType = ItemType;
 }
@@ -121,7 +121,7 @@ void TConsole::Write(
 
   PrintDelimiterBefore(ItemType);
 
-  RawConsole.PutByte(Unit);
+  RawConsole.SendByte(Unit);
 
   PrevItemType = ItemType;
 }
@@ -135,8 +135,8 @@ void TConsole::Print(
 {
   PrintDelimiterBefore(TItemType::Line);
 
-  RawConsole.PutSegment(MemSeg);
-  RawConsole.PutByte('\n');
+  RawConsole.SendSegment(MemSeg);
+  RawConsole.SendByte('\n');
 
   PrevItemType = TItemType::Nothing;
 }
@@ -150,8 +150,8 @@ void TConsole::PrintProgmem(
 {
   PrintDelimiterBefore(TItemType::Line);
 
-  RawConsole.PutProgmemSegment(ProgmemSeg);
-  RawConsole.PutByte('\n');
+  RawConsole.SendProgmemSegment(ProgmemSeg);
+  RawConsole.SendByte('\n');
 
   PrevItemType = TItemType::Nothing;
 }
@@ -182,9 +182,9 @@ void TConsole::Print(
   PrintDelimiterBefore(TItemType::Number);
 
   if (IsTrue)
-    RawConsole.PutSegment(FromAsciiz("YES"));
+    RawConsole.SendSegment(FromAsciiz("YES"));
   else
-    RawConsole.PutSegment(FromAsciiz("NO"));
+    RawConsole.SendSegment(FromAsciiz("NO"));
 
   PrevItemType = TItemType::Number;
 }
@@ -275,9 +275,9 @@ void TConsole::PrintDelimiter(
   if (WriteNothing)
     ;
   else if (WriteSpace)
-    RawConsole.PutByte(' ');
+    RawConsole.SendByte(' ');
   else if (WriteNewline)
-    RawConsole.PutByte('\n');
+    RawConsole.SendByte('\n');
 }
 
 /*
@@ -349,10 +349,12 @@ void TConsole::PrintIndent(
 
   if (DoIt)
   {
+    // Print indentation
     for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
     {
-      RawConsole.PutByte(' ');
-      RawConsole.PutByte(' ');
+      // Indent is two spaces
+      RawConsole.SendByte(' ');
+      RawConsole.SendByte(' ');
     }
   }
 }
@@ -366,4 +368,5 @@ me_Console::TConsole Console;
   2024-10 # # # # # #
   2024-12 # # #
   2025-08-14
+  2025-08-21
 */
