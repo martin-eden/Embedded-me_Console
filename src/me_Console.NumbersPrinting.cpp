@@ -6,7 +6,7 @@
 */
 
 /*
-  Very boring code.
+  Very boring code
 
   We support six integer types:
 
