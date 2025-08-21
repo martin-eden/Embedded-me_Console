@@ -28,16 +28,6 @@ TBool TRawConsole::Init()
 }
 
 /*
-  Read byte from UART
-*/
-TBool TRawConsole::ReceiveByte(
-  TUint_1 * Byte
-)
-{
-  return me_Uart::GetByte(Byte);
-}
-
-/*
   Write byte to UART
 */
 TBool TRawConsole::SendByte(
@@ -47,39 +37,6 @@ TBool TRawConsole::SendByte(
   me_Uart::SendByte(Byte);
 
   return true;
-}
-
-/*
-  Read data from UART into memory segment
-
-  Maximum data that can be read is segment capacity.
-
-  Returns number of units (bytes) read.
-*/
-TUint_2 TRawConsole::ReceiveSegment(
-  TMemorySegment Data
-)
-{
-  TSegmentIterator Rator;
-  TAddress Addr;
-  TUint_1 Byte;
-  TUint_2 NumBytesProcessed = 0;
-
-  if (!Rator.Init(Data))
-    return NumBytesProcessed;
-
-  while (Rator.GetNext(&Addr))
-  {
-    if (!me_Uart::GetByte(&Byte))
-      break;
-
-    if (!me_WorkMemory::SetByteTo(Addr, Byte))
-      break;
-
-    ++NumBytesProcessed;
-  }
-
-  return NumBytesProcessed;
 }
 
 /*

@@ -15,7 +15,7 @@ namespace me_Console
   /*
     Raw console
 
-    Internal interface to read/write data.
+    Internal interface to write data.
 
     Base data types:
 
@@ -33,10 +33,8 @@ namespace me_Console
     public:
       TBool Init();
 
-      TBool ReceiveByte(TUint_1 * Byte);
       TBool SendByte(TUint_1 Byte);
 
-      TUint_2 ReceiveSegment(me_MemorySegment::TMemorySegment Data);
       TBool SendSegment(me_MemorySegment::TMemorySegment Data);
       TBool SendProgmemSegment(me_MemorySegment::TMemorySegment Data);
   };
