@@ -2,27 +2,13 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2024-12-19
+  Last mod.: 2025-08-21
 */
 
 #include <me_Console.h>
 
 #include <me_BaseTypes.h>
-#include <me_Uart.h>
 #include <me_MemorySegment.h>
-
-void setup()
-{
-  me_Uart::Init(me_Uart::Speed_115k_Bps);
-
-  RunTest();
-}
-
-void loop()
-{
-}
-
-// --
 
 /*
   Demonstrate [me_Console] usage
@@ -38,8 +24,8 @@ void RunTest()
     <me_Console.cpp> defines global variable "Console".
     So you don't need this declaration.
 
-      You can still use it but beware that global UART
-      will be closed at your instance destruction.
+    You can still use it but beware that indentation will gone
+    at your instance destruction.
   */
 
   Console.Print("[me_Console] demo.");
@@ -131,8 +117,19 @@ void RunTest()
   Console.Print("[me_Console] That's all folks!");
 }
 
+void setup()
+{
+  Console.Init();
+
+  RunTest();
+}
+
+void loop()
+{
+}
+
 /*
   2024-10 # # # # #
-  2024-12-12
-  2024-12-19
+  2024-12 # #
+  2025-08-21
 */
