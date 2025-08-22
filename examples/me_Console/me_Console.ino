@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-21
+  Last mod.: 2025-08-22
 */
 
 #include <me_Console.h>
@@ -95,7 +95,8 @@ void RunTest()
 
   {
     static const TUint_1 ProgmemData[] [[gnu::progmem]] =
-      "These characters are located in program memory" ;
+      "These characters are located in program memory";
+
     me_MemorySegment::TMemorySegment ProgmemSeg =
       {
         { .Addr = (TAddress) ProgmemData },
@@ -104,6 +105,11 @@ void RunTest()
 
     Console.Write("Program memory ( ");
     Console.WriteProgmem(ProgmemSeg);
+    Console.Write(" )");
+    Console.EndLine();
+
+    Console.Write("Program memory (via macro) ( ");
+    Console.WriteProgmem(AsProgmemSeg("This one is in program memory also"));
     Console.Write(" )");
     Console.EndLine();
   }
@@ -132,4 +138,5 @@ void loop()
   2024-10 # # # # #
   2024-12 # #
   2025-08-21
+  2025-08-22
 */
