@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-21
+  Last mod.: 2025-08-25
 */
 
 /*
@@ -26,7 +26,7 @@ using namespace me_Console;
 
 using me_CodecDecInt::Encode;
 
-const TOperation SendByte = me_Uart::Op_PutByte;
+const TFixedOperation SendByte = me_Uart::Op_PutByte;
 
 /*
   Base code will be repeated six times. Difference is type of argument.
@@ -87,7 +87,6 @@ void TConsole::Print(TSint_1 Value)
 }
 
 /*
-  2024-10-17
-  2024-12-18
-  2024-12-19
+  2024 # # #
+  2025-08-25
 */

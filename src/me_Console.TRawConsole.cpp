@@ -2,16 +2,19 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-21
+  Last mod.: 2025-08-25
 */
 
 #include <me_Console.h>
 
-#include <me_Uart.h>
+#include <me_MemorySegment.h>
+
 #include <me_WorkMemory.h>
 #include <me_ProgramMemory.h>
-#include <me_MemorySegment.h>
-#include <me_SegmentProcessor.h>
+#include <me_Uart.h>
+
+#include <me_Streams.h>
+#include <me_MemsegStreams.h>
 
 using namespace me_Console;
 
@@ -46,13 +49,15 @@ TBool TRawConsole::SendSegment(
   TMemorySegment Data
 )
 {
-  return
-    me_SegmentProcessor::CopyFrom(
-      Data,
-      Data,
-      me_WorkMemory::Op_GetByte,
-      me_Uart::Op_PutByte
-    );
+  me_MemsegStreams::TMemsegInputStream MemoryInputStream;
+  me_Streams::TOutputStream UartOutputStream;
+
+  if (!MemoryInputStream.Init(Data, me_WorkMemory::Op_GetByte))
+    return false;
+
+  UartOutputStream.Init(me_Uart::Op_PutByte);
+
+  return me_Streams::Freetown::CopyTo(&UartOutputStream, &MemoryInputStream);
 }
 
 /*
@@ -62,16 +67,19 @@ TBool TRawConsole::SendProgmemSegment(
   TMemorySegment Data
 )
 {
-  return
-    me_SegmentProcessor::CopyFrom(
-      Data,
-      Data,
-      me_ProgramMemory::Op_GetByte,
-      me_Uart::Op_PutByte
-    );
+  me_MemsegStreams::TMemsegInputStream MemoryInputStream;
+  me_Streams::TOutputStream UartOutputStream;
+
+  if (!MemoryInputStream.Init(Data, me_ProgramMemory::Op_GetByte))
+    return false;
+
+  UartOutputStream.Init(me_Uart::Op_PutByte);
+
+  return me_Streams::Freetown::CopyTo(&UartOutputStream, &MemoryInputStream);
 }
 
 /*
   2024-12-18
   2025-08-21
+  2025-08-25
 */
