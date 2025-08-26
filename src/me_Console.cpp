@@ -15,9 +15,9 @@ using
   me_MemorySegment::TMemorySegment;
 
 /*
-  Setup. Optional
+  Setup
 
-  Setup UART to typical speed.
+  Sets output stream.
 */
 void TConsole::Init()
 {

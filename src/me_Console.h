@@ -2,13 +2,14 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-21
+  Last mod.: 2025-08-26
 */
 
 #pragma once
 
 #include <me_BaseTypes.h>
 #include <me_MemorySegment.h>
+#include <me_Streams.h>
 
 namespace me_Console
 {
@@ -21,22 +22,21 @@ namespace me_Console
 
       * byte (TUint_1)
       * memory segment (TMemorySegment)
-
-    Supported directions:
-
-      UART -> RAM: Receive..()
-      RAM -> UART: Send..()
-      Flash -> UART: EmitProgmem..()
   */
   class TRawConsole
   {
     public:
       TBool Init();
 
+      me_Streams::IOutputStream * GetOutputStream();
+
       TBool SendByte(TUint_1 Byte);
 
       TBool SendSegment(me_MemorySegment::TMemorySegment Data);
       TBool SendProgmemSegment(me_MemorySegment::TMemorySegment Data);
+
+    private:
+      me_Streams::TOutputStream OutputStream;
   };
 
   /*
@@ -81,7 +81,7 @@ namespace me_Console
   class TConsole
   {
     public:
-      // Setup UART to typical speed. Optional
+      // Setup output
       void Init();
 
       // ( Indents!
@@ -179,4 +179,5 @@ extern me_Console::TConsole Console;
   2024-12 # # # #
   2025-08-14 TBool printing
   2025-08-21 Init()
+  2025-08-26
 */
