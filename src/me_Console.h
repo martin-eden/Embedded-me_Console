@@ -22,7 +22,7 @@ namespace me_Console
     Base data types:
 
       * byte (TUint_1)
-      * memory segment (TMemorySegment)
+      * memory segment (TAddressSegment)
   */
   class TRawConsole
   {
@@ -64,7 +64,7 @@ namespace me_Console
 
       * Boolean
       * Integers
-      * Memory segment (TMemorySegment)
+      * Memory segment (TAddressSegment)
       * Constant strings (TAsciiz)
 
     Supported methods:
