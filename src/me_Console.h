@@ -2,12 +2,14 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-26
+  Last mod.: 2025-08-27
 */
 
 #pragma once
 
 #include <me_BaseTypes.h>
+#include <me_BaseInterfaces.h>
+
 #include <me_MemorySegment.h>
 #include <me_Streams.h>
 
@@ -28,7 +30,7 @@ namespace me_Console
     public:
       TBool Init();
 
-      me_Streams::IOutputStream * GetOutputStream();
+      IOutputStream * GetOutputStream();
 
       TBool SendByte(TUint_1 Byte);
 

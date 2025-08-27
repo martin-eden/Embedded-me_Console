@@ -2,16 +2,18 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-26
+  Last mod.: 2025-08-27
 */
 
 #include <me_Console.h>
 
-#include <me_MemorySegment.h>
+#include <me_BaseTypes.h>
+#include <me_BaseInterfaces.h>
 
 #include <me_Uart.h>
 #include <me_WorkMemory.h>
 #include <me_ProgramMemory.h>
+#include <me_MemorySegment.h>
 
 #include <me_Streams.h>
 #include <me_MemsegStreams.h>
@@ -34,7 +36,7 @@ TBool TRawConsole::Init()
 /*
   Return pointer to output stream instance
 */
-me_Streams::IOutputStream * TRawConsole::GetOutputStream()
+IOutputStream * TRawConsole::GetOutputStream()
 {
   return &OutputStream;
 }
