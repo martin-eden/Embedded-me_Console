@@ -55,7 +55,7 @@ TBool TRawConsole::SendByte(
   Send data segment from memory to output stream
 */
 TBool TRawConsole::SendSegment(
-  me_MemorySegment::TMemorySegment Data
+  TAddressSegment Data
 )
 {
   me_MemsegStreams::TMemsegInputStream MemoryInputStream;
@@ -70,7 +70,7 @@ TBool TRawConsole::SendSegment(
   Send data from program memory segment to UART
 */
 TBool TRawConsole::SendProgmemSegment(
-  me_MemorySegment::TMemorySegment Data
+  TAddressSegment Data
 )
 {
   me_MemsegStreams::TMemsegInputStream MemoryInputStream;

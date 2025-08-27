@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-26
+  Last mod.: 2025-08-27
 */
 
 /*
@@ -19,6 +19,7 @@
 
 #include <me_Console.h>
 
+#include <me_BaseTypes.h>
 #include <me_CodecDecInt.h> // Encode()
 
 using namespace me_Console;

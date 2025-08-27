@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-22
+  Last mod.: 2025-08-27
 */
 
 #include <me_Console.h>
@@ -97,9 +97,9 @@ void RunTest()
     static const TUint_1 ProgmemData[] [[gnu::progmem]] =
       "These characters are located in program memory";
 
-    me_MemorySegment::TMemorySegment ProgmemSeg =
+    TAddressSegment ProgmemSeg =
       {
-        { .Addr = (TAddress) ProgmemData },
+        .Addr = (TAddress) ProgmemData,
         .Size = sizeof(ProgmemData) - 1
       };
 

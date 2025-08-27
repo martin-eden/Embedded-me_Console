@@ -2,17 +2,15 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-21
+  Last mod.: 2025-08-27
 */
 
 #include <me_Console.h>
 
-#include <me_MemorySegment.h> // TMemorySegment, iterator
+#include <me_BaseTypes.h>
+#include <me_MemorySegment.h>
 
 using namespace me_Console;
-
-using
-  me_MemorySegment::TMemorySegment;
 
 /*
   Setup
@@ -69,7 +67,7 @@ void TConsole::PrintDelimiterBefore(
   Write memory segment contents
 */
 void TConsole::Write(
-  TMemorySegment MemSeg
+  TAddressSegment MemSeg
 )
 {
   TItemType ItemType = TItemType::Chunk;
@@ -85,7 +83,7 @@ void TConsole::Write(
   Raw print of program memory contents
 */
 void TConsole::WriteProgmem(
-  TMemorySegment ProgmemSeg
+  TAddressSegment ProgmemSeg
 )
 {
   TItemType ItemType = TItemType::Chunk;
@@ -130,12 +128,12 @@ void TConsole::Write(
   Print memory segment
 */
 void TConsole::Print(
-  TMemorySegment MemSeg
+  TAddressSegment AddrSeg
 )
 {
   PrintDelimiterBefore(TItemType::Line);
 
-  RawConsole.SendSegment(MemSeg);
+  RawConsole.SendSegment(AddrSeg);
   RawConsole.SendByte('\n');
 
   PrevItemType = TItemType::Nothing;
@@ -145,7 +143,7 @@ void TConsole::Print(
   Print segment from program memory
 */
 void TConsole::PrintProgmem(
-  TMemorySegment ProgmemSeg
+  TAddressSegment ProgmemSeg
 )
 {
   PrintDelimiterBefore(TItemType::Line);

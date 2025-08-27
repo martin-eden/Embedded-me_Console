@@ -10,7 +10,6 @@
 #include <me_BaseTypes.h>
 #include <me_BaseInterfaces.h>
 
-#include <me_MemorySegment.h>
 #include <me_Streams.h>
 
 namespace me_Console
@@ -34,8 +33,8 @@ namespace me_Console
 
       TBool SendByte(TUint_1 Byte);
 
-      TBool SendSegment(me_MemorySegment::TMemorySegment Data);
-      TBool SendProgmemSegment(me_MemorySegment::TMemorySegment Data);
+      TBool SendSegment(TAddressSegment Data);
+      TBool SendProgmemSegment(TAddressSegment Data);
 
     private:
       me_Streams::TOutputStream OutputStream;
@@ -98,24 +97,24 @@ namespace me_Console
       // ( Write data
 
       // Data is memory segment
-      void Write(me_MemorySegment::TMemorySegment Data);
+      void Write(TAddressSegment Data);
       // Data is ASCIIZ pointer
       void Write(const TAsciiz String);
       // Data is character
       void Write(TUnit Unit);
       // Data is segment in program memory
-      void WriteProgmem(me_MemorySegment::TMemorySegment Data);
+      void WriteProgmem(TAddressSegment Data);
 
       // )
 
       // ( Print data on standalone line
 
       // Data is memory segment
-      void Print(me_MemorySegment::TMemorySegment Data);
+      void Print(TAddressSegment Data);
       // Data is ASCIIZ pointer
       void Print(const TAsciiz Asciiz);
       // Data is segment in program memory
-      void PrintProgmem(me_MemorySegment::TMemorySegment Data);
+      void PrintProgmem(TAddressSegment Data);
 
       // )
 
