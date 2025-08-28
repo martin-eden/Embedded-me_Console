@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-27
+  Last mod.: 2025-08-29
 */
 
 #include <me_Console.h>
@@ -102,10 +102,7 @@ void TConsole::Write(
   const TAsciiz Asciiz
 )
 {
-  using
-    me_MemorySegment::Freetown::FromAsciiz;
-
-  Write(FromAsciiz(Asciiz));
+  Write(me_MemorySegment::FromAsciiz(Asciiz));
 }
 
 /*
@@ -161,10 +158,7 @@ void TConsole::Print(
   const TAsciiz Asciiz
 )
 {
-  using
-    me_MemorySegment::Freetown::FromAsciiz;
-
-  Print(FromAsciiz(Asciiz));
+  Print(me_MemorySegment::FromAsciiz(Asciiz));
 }
 
 /*
@@ -174,15 +168,12 @@ void TConsole::Print(
   TBool IsTrue
 )
 {
-  using
-    me_MemorySegment::Freetown::FromAsciiz;
-
   PrintDelimiterBefore(TItemType::Number);
 
   if (IsTrue)
-    RawConsole.SendSegment(FromAsciiz("YES"));
+    RawConsole.SendSegment(me_MemorySegment::FromAsciiz("YES"));
   else
-    RawConsole.SendSegment(FromAsciiz("NO"));
+    RawConsole.SendSegment(me_MemorySegment::FromAsciiz("NO"));
 
   PrevItemType = TItemType::Number;
 }
