@@ -2,15 +2,14 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-27
+  Last mod.: 2025-08-28
 */
 
 #pragma once
 
 #include <me_BaseTypes.h>
 #include <me_BaseInterfaces.h>
-
-#include <me_Streams.h>
+#include <me_StreamTools.h>
 
 namespace me_Console
 {
@@ -37,7 +36,7 @@ namespace me_Console
       TBool SendProgmemSegment(TAddressSegment Data);
 
     private:
-      me_Streams::TOutputStream OutputStream;
+      me_StreamTools::TOutputStream OutputStream;
   };
 
   /*
@@ -176,8 +175,7 @@ namespace me_Console
 extern me_Console::TConsole Console;
 
 /*
-  2024-10 # # # # # #
-  2024-12 # # # #
+  2024 # # # # # # # # # #
   2025-08-14 TBool printing
   2025-08-21 Init()
   2025-08-26

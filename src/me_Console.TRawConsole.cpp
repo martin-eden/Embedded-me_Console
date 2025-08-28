@@ -15,7 +15,7 @@
 #include <me_ProgramMemory.h>
 #include <me_MemorySegment.h>
 
-#include <me_Streams.h>
+#include <me_StreamTools.h>
 #include <me_MemsegStreams.h>
 
 using namespace me_Console;
@@ -63,7 +63,7 @@ TBool TRawConsole::SendSegment(
   if (!MemoryInputStream.Init(Data, me_WorkMemory::Op_GetByte))
     return false;
 
-  return me_Streams::CopyStreamTo(&MemoryInputStream, &OutputStream);
+  return me_StreamTools::CopyStreamTo(&MemoryInputStream, &OutputStream);
 }
 
 /*
@@ -78,7 +78,7 @@ TBool TRawConsole::SendProgmemSegment(
   if (!MemoryInputStream.Init(Data, me_ProgramMemory::Op_GetByte))
     return false;
 
-  return me_Streams::CopyStreamTo(&MemoryInputStream, &OutputStream);
+  return me_StreamTools::CopyStreamTo(&MemoryInputStream, &OutputStream);
 }
 
 /*
