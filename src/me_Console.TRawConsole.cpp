@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-27
+  Last mod.: 2025-08-28
 */
 
 #include <me_Console.h>
@@ -58,7 +58,7 @@ TBool TRawConsole::SendSegment(
   TAddressSegment Data
 )
 {
-  me_MemsegStreams::TMemsegInputStream MemoryInputStream;
+  me_MemsegStreams::TAddrsegInputStream MemoryInputStream;
 
   if (!MemoryInputStream.Init(Data, me_WorkMemory::Op_GetByte))
     return false;
@@ -73,7 +73,7 @@ TBool TRawConsole::SendProgmemSegment(
   TAddressSegment Data
 )
 {
-  me_MemsegStreams::TMemsegInputStream MemoryInputStream;
+  me_MemsegStreams::TAddrsegInputStream MemoryInputStream;
 
   if (!MemoryInputStream.Init(Data, me_ProgramMemory::Op_GetByte))
     return false;
