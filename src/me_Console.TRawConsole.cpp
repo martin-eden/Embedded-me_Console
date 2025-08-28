@@ -16,7 +16,6 @@
 #include <me_MemorySegment.h>
 
 #include <me_StreamTools.h>
-#include <me_MemsegStreams.h>
 
 using namespace me_Console;
 
@@ -58,7 +57,7 @@ TBool TRawConsole::SendSegment(
   TAddressSegment Data
 )
 {
-  me_MemsegStreams::TAddrsegInputStream MemoryInputStream;
+  me_StreamTools::TAddrsegInputStream MemoryInputStream;
 
   if (!MemoryInputStream.Init(Data, me_WorkMemory::Op_GetByte))
     return false;
@@ -73,7 +72,7 @@ TBool TRawConsole::SendProgmemSegment(
   TAddressSegment Data
 )
 {
-  me_MemsegStreams::TAddrsegInputStream MemoryInputStream;
+  me_StreamTools::TAddrsegInputStream MemoryInputStream;
 
   if (!MemoryInputStream.Init(Data, me_ProgramMemory::Op_GetByte))
     return false;
