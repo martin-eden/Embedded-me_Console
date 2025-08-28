@@ -36,7 +36,7 @@ namespace me_Console
       TBool SendProgmemSegment(TAddressSegment Data);
 
     private:
-      me_StreamTools::TOutputStream OutputStream;
+      me_StreamTools::TWriterOutputStream OutputStream;
   };
 
   /*
