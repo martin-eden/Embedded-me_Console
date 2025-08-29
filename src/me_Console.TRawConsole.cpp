@@ -10,7 +10,6 @@
 #include <me_BaseTypes.h>
 #include <me_BaseInterfaces.h>
 
-#include <me_WorkMemory.h>
 #include <me_ProgramMemory.h>
 #include <me_MemorySegment.h>
 
@@ -52,30 +51,30 @@ TBool TRawConsole::SendByte(
   Send data segment from memory to output stream
 */
 TBool TRawConsole::SendSegment(
-  TAddressSegment Data
+  TAddressSegment MemSeg
 )
 {
-  me_StreamTools::TAddrsegInputStream MemoryInputStream;
+  me_StreamsCollection::TWorkmemInputStream MemInputStream;
 
-  if (!MemoryInputStream.Init(Data, me_WorkMemory::Op_GetByte))
+  if (!MemInputStream.Init(MemSeg))
     return false;
 
-  return me_StreamTools::CopyStreamTo(&MemoryInputStream, &OutputStream);
+  return me_StreamTools::CopyStreamTo(&MemInputStream, &OutputStream);
 }
 
 /*
   Send data from program memory segment to UART
 */
 TBool TRawConsole::SendProgmemSegment(
-  TAddressSegment Data
+  TAddressSegment ProgmemSeg
 )
 {
-  me_StreamTools::TAddrsegInputStream MemoryInputStream;
+  me_StreamTools::TAddrsegInputStream MemInputStream;
 
-  if (!MemoryInputStream.Init(Data, me_ProgramMemory::Op_GetByte))
+  if (!MemInputStream.Init(ProgmemSeg, me_ProgramMemory::Op_GetByte))
     return false;
 
-  return me_StreamTools::CopyStreamTo(&MemoryInputStream, &OutputStream);
+  return me_StreamTools::CopyStreamTo(&MemInputStream, &OutputStream);
 }
 
 /*
