@@ -11,7 +11,6 @@
 #include <me_BaseInterfaces.h>
 
 #include <me_ProgramMemory.h>
-#include <me_MemorySegment.h>
 
 #include <me_StreamTools.h>
 #include <me_StreamsCollection.h>
