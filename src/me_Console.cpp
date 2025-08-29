@@ -8,7 +8,7 @@
 #include <me_Console.h>
 
 #include <me_BaseTypes.h>
-#include <me_MemorySegment.h>
+#include <me_WorkmemTools.h>
 
 using namespace me_Console;
 
@@ -102,7 +102,7 @@ void TConsole::Write(
   const TAsciiz Asciiz
 )
 {
-  Write(me_MemorySegment::FromAsciiz(Asciiz));
+  Write(me_WorkmemTools::FromAsciiz(Asciiz));
 }
 
 /*
@@ -158,7 +158,7 @@ void TConsole::Print(
   const TAsciiz Asciiz
 )
 {
-  Print(me_MemorySegment::FromAsciiz(Asciiz));
+  Print(me_WorkmemTools::FromAsciiz(Asciiz));
 }
 
 /*
@@ -171,9 +171,9 @@ void TConsole::Print(
   PrintDelimiterBefore(TItemType::Number);
 
   if (IsTrue)
-    RawConsole.SendSegment(me_MemorySegment::FromAsciiz("YES"));
+    RawConsole.SendSegment(me_WorkmemTools::FromAsciiz("YES"));
   else
-    RawConsole.SendSegment(me_MemorySegment::FromAsciiz("NO"));
+    RawConsole.SendSegment(me_WorkmemTools::FromAsciiz("NO"));
 
   PrevItemType = TItemType::Number;
 }
