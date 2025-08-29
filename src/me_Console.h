@@ -2,14 +2,14 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-28
+  Last mod.: 2025-08-29
 */
 
 #pragma once
 
 #include <me_BaseTypes.h>
 #include <me_BaseInterfaces.h>
-#include <me_StreamTools.h>
+#include <me_StreamsCollection.h>
 
 namespace me_Console
 {
@@ -36,7 +36,7 @@ namespace me_Console
       TBool SendProgmemSegment(TAddressSegment Data);
 
     private:
-      me_StreamTools::TWriterOutputStream OutputStream;
+      me_StreamsCollection::TUartOutputStream OutputStream;
   };
 
   /*

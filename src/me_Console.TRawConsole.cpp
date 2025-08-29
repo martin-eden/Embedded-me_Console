@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-28
+  Last mod.: 2025-08-29
 */
 
 #include <me_Console.h>
@@ -10,12 +10,12 @@
 #include <me_BaseTypes.h>
 #include <me_BaseInterfaces.h>
 
-#include <me_Uart.h>
 #include <me_WorkMemory.h>
 #include <me_ProgramMemory.h>
 #include <me_MemorySegment.h>
 
 #include <me_StreamTools.h>
+#include <me_StreamsCollection.h>
 
 using namespace me_Console;
 
@@ -24,10 +24,8 @@ using namespace me_Console;
 */
 TBool TRawConsole::Init()
 {
-  if (!me_Uart::Init(me_Uart::Speed_115k_Bps))
+  if (!OutputStream.Init())
     return false;
-
-  OutputStream.Init(me_Uart::Op_PutByte);
 
   return true;
 }
