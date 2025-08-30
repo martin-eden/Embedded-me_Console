@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-29
+  Last mod.: 2025-08-30
 */
 
 #include <me_Console.h>
@@ -53,12 +53,12 @@ TBool TRawConsole::SendSegment(
   TAddressSegment MemSeg
 )
 {
-  me_StreamsCollection::TWorkmemInputStream MemInputStream;
+  me_StreamsCollection::TWorkmemInputStream InputStream;
 
-  if (!MemInputStream.Init(MemSeg))
+  if (!InputStream.Init(MemSeg))
     return false;
 
-  return me_StreamTools::CopyStreamTo(&MemInputStream, &OutputStream);
+  return me_StreamTools::CopyStreamTo(&InputStream, &OutputStream);
 }
 
 /*
@@ -68,12 +68,12 @@ TBool TRawConsole::SendProgmemSegment(
   TAddressSegment ProgmemSeg
 )
 {
-  me_StreamTools::TAddrsegInputStream MemInputStream;
+  me_StreamsCollection::TProgmemInputStream InputStream;
 
-  if (!MemInputStream.Init(ProgmemSeg, me_ProgramMemory::Op_GetByte))
+  if (!InputStream.Init(ProgmemSeg))
     return false;
 
-  return me_StreamTools::CopyStreamTo(&MemInputStream, &OutputStream);
+  return me_StreamTools::CopyStreamTo(&InputStream, &OutputStream);
 }
 
 /*
