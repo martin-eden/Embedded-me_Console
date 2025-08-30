@@ -10,8 +10,6 @@
 #include <me_BaseTypes.h>
 #include <me_BaseInterfaces.h>
 
-#include <me_ProgramMemory.h>
-
 #include <me_StreamTools.h>
 #include <me_StreamsCollection.h>
 
