@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-29
+  Last mod.: 2025-09-01
 */
 
 #pragma once
@@ -28,6 +28,7 @@ namespace me_Console
     public:
       TBool Init();
 
+      IInputStream * GetInputStream();
       IOutputStream * GetOutputStream();
 
       TBool SendByte(TUint_1 Byte);
@@ -36,6 +37,7 @@ namespace me_Console
       TBool SendProgmemSegment(TAddressSegment Data);
 
     private:
+      me_StreamsCollection::TUartInputStream InputStream;
       me_StreamsCollection::TUartOutputStream OutputStream;
   };
 
@@ -122,20 +124,29 @@ namespace me_Console
 
       // ( Custom printers for base types
 
-      // Print TUint_1
+      // TUint_1
       void Print(TUint_1 Uint_1);
-      // Print TUint_2
+      // TUint_2
       void Print(TUint_2 Uint_2);
-      // Print TUint_4
+      // TUint_4
       void Print(TUint_4 Uint_4);
-      // Print TSint_1
+      // TSint_1
       void Print(TSint_1 Sint_1);
-      // Print TSint_2
+      // TSint_2
       void Print(TSint_2 Sint_2);
-      // Print TSint_4
+      // TSint_4
       void Print(TSint_4 Sint_4);
-      // Print TBool
+      // TBool
       void Print(TBool Bool);
+
+      // )
+
+      // ( Custom readers for base types
+
+      // TUint_1
+      TBool Read(TUint_1 * Uint_1);
+      // TUint_2
+      TBool Read(TUint_2 * Uint_2);
 
       // )
 
@@ -179,4 +190,5 @@ extern me_Console::TConsole Console;
   2025-08-14 TBool printing
   2025-08-21 Init()
   2025-08-26
+  2025-09-01
 */

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-30
+  Last mod.: 2025-09-01
 */
 
 #include <me_Console.h>
@@ -20,10 +20,21 @@ using namespace me_Console;
 */
 TBool TRawConsole::Init()
 {
+  if (!InputStream.Init())
+    return false;
+
   if (!OutputStream.Init())
     return false;
 
   return true;
+}
+
+/*
+  Return pointer to input stream instance
+*/
+IInputStream * TRawConsole::GetInputStream()
+{
+  return &InputStream;
 }
 
 /*
@@ -79,4 +90,5 @@ TBool TRawConsole::SendProgmemSegment(
   2025-08-21
   2025-08-25
   2025-08-26
+  2025-09-01
 */

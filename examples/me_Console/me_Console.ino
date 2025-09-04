@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-29
+  Last mod.: 2025-09-04
 */
 
 #include <me_Console.h>
@@ -18,7 +18,7 @@
   Prints ASCIIZ in program memory.
   Uses indentation.
 */
-void RunTest()
+void TestPrints()
 {
   /*
     me_Console::TConsole Console;
@@ -127,15 +127,48 @@ void RunTest()
 
   Console.Unindent();
   Console.Print("--");
+}
 
-  Console.Print("[me_Console] That's all folks!");
+void TestReads()
+{
+  TUint_1 Uint_1 = 0;
+  TUint_2 Uint_2 = 0;
+
+  Console.Print("Enter integer [0, 255]");
+
+  if (!Console.Read(&Uint_1))
+    Console.Print("Reading TUint_1 failed");
+
+  Console.Write("Got");
+  Console.Print(Uint_1);
+  Console.EndLine();
+
+
+  Console.Print("Enter integer [0, 65535]");
+
+  if (!Console.Read(&Uint_2))
+    Console.Print("Reading TUint_2 failed");
+
+  Console.Write("Got");
+  Console.Print(Uint_2);
+  Console.EndLine();
+}
+
+void RunTests()
+{
+  TestPrints();
+  TestReads();
 }
 
 void setup()
 {
   Console.Init();
 
-  RunTest();
+  Console.Print("( [me_Console] test");
+
+  RunTests();
+
+  Console.Print(") Done");
 }
 
 void loop()
@@ -143,8 +176,7 @@ void loop()
 }
 
 /*
-  2024-10 # # # # #
-  2024-12 # #
-  2025-08-21
-  2025-08-22
+  2024 # # # # # # #
+  2025 # #
+  2025-09-04
 */
