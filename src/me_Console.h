@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-01
+  Last mod.: 2025-09-04
 */
 
 #pragma once
@@ -83,8 +83,11 @@ namespace me_Console
   class TConsole
   {
     public:
-      // Setup output
+      // Setup
       void Init();
+
+      IInputStream * GetInputStream();
+      IOutputStream * GetOutputStream();
 
       // ( Indents!
 
@@ -191,4 +194,5 @@ extern me_Console::TConsole Console;
   2025-08-21 Init()
   2025-08-26
   2025-09-01
+  2025-09-04
 */

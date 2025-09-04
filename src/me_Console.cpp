@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-29
+  Last mod.: 2025-09-04
 */
 
 #include <me_Console.h>
@@ -20,6 +20,22 @@ using namespace me_Console;
 void TConsole::Init()
 {
   RawConsole.Init();
+}
+
+/*
+  Get input stream
+*/
+IInputStream * TConsole::GetInputStream()
+{
+  return RawConsole.GetInputStream();
+}
+
+/*
+  Get output stream
+*/
+IOutputStream * TConsole::GetOutputStream()
+{
+  return RawConsole.GetOutputStream();
 }
 
 /*
@@ -355,7 +371,6 @@ me_Console::TConsole Console;
 
 /*
   2024-10 # # # # # #
-  2024-12 # # #
-  2025-08-14
-  2025-08-21
+  2024-12 # # # # #
+  2025-09-04
 */
