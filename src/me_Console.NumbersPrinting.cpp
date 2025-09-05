@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-08-27
+  Last mod.: 2025-09-05
 */
 
 /*
@@ -20,11 +20,9 @@
 #include <me_Console.h>
 
 #include <me_BaseTypes.h>
-#include <me_CodecDecInt.h> // Encode()
+#include <me_WriteInteger.h>
 
 using namespace me_Console;
-
-using me_CodecDecInt::Encode;
 
 /*
   Base code will be repeated six times. Difference is type of argument.
@@ -37,7 +35,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -48,7 +46,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -59,7 +57,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -70,7 +68,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -81,7 +79,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -92,7 +90,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
