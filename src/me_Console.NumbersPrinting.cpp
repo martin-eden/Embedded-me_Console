@@ -28,14 +28,14 @@ using namespace me_Console;
   Base code will be repeated six times. Difference is type of argument.
 */
 
-// Print TUint_4
+// Print TUint_1
 void TConsole::Print(
-  TUint_4 Value
+  TUint_1 Value
 )
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_U4(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_U1(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -50,25 +50,25 @@ void TConsole::Print(
   PrevItemType = ItemType;
 }
 
-// Print TUint_1
+// Print TUint_4
 void TConsole::Print(
-  TUint_1 Value
+  TUint_4 Value
 )
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_U1(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_U4(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
-// Print TSint_4
+// Print TSint_1
 void TConsole::Print(
-  TSint_4 Value
+  TSint_1 Value
 )
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_S4(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_S1(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -83,14 +83,14 @@ void TConsole::Print(
   PrevItemType = ItemType;
 }
 
-// Print TSint_1
+// Print TSint_4
 void TConsole::Print(
-  TSint_1 Value
+  TSint_4 Value
 )
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_S1(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_S4(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
