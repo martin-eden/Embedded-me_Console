@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-05
+  Last mod.: 2025-09-06
 */
 
 /*
@@ -35,7 +35,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_U4(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -46,7 +46,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_U2(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -57,7 +57,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_U1(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -68,7 +68,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_S4(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -79,7 +79,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_S2(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
@@ -90,12 +90,11 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Encode(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_S1(Value, RawConsole.GetOutputStream());
   PrevItemType = ItemType;
 }
 
 /*
   2024 # # #
-  2025-08-25
-  2025-08-26
+  2025 # #
 */
