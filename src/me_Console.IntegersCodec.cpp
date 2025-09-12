@@ -1,32 +1,33 @@
-// Printing integer types in decimal ASCII
+// Reading/writing integer numbers for [me_Console]
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-06
-*/
-
-/*
-  Very boring code
-
-  We support six integer types:
-
-    TUint_1  TSint_1
-    TUint_2  TSint_2
-    TUint_4  TSint_4
-
-  We promised to provide overridden Print() for each of them.
+  Last mod.: 2025-09-12
 */
 
 #include <me_Console.h>
 
 #include <me_BaseTypes.h>
+#include <me_ReadInteger.h>
 #include <me_WriteInteger.h>
 
 using namespace me_Console;
 
-/*
-  Base code will be repeated six times. Difference is type of argument.
-*/
+// Read TUint_1
+TBool TConsole::Read(
+  TUint_1 * Uint_1
+)
+{
+  return me_ReadInteger::Read_TUint_1(Uint_1, RawConsole.GetInputStream());
+}
+
+// Read TUint_2
+TBool TConsole::Read(
+  TUint_2 * Uint_2
+)
+{
+  return me_ReadInteger::Read_TUint_2(Uint_2, RawConsole.GetInputStream());
+}
 
 // Print TUint_1
 void TConsole::Print(
@@ -97,4 +98,6 @@ void TConsole::Print(
 /*
   2024 # # #
   2025 # #
+  2025-09-01
+  2025-09-12
 */
