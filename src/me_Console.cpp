@@ -9,33 +9,46 @@
 
 #include <me_BaseTypes.h>
 #include <me_WorkmemTools.h>
+#include <me_StreamsCollection.h>
 
 using namespace me_Console;
 
-/*
-  Setup
-
-  Sets output stream.
-*/
+// Setup
 void TConsole::Init()
 {
-  RawConsole.Init();
+  UartInputStream.Init();
+  UartOutputStream.Init();
+
+  InputStream = &UartInputStream;
+  OutputStream = &UartOutputStream;
 }
 
-/*
-  Get input stream
-*/
+// Get input stream
 IInputStream * TConsole::GetInputStream()
 {
-  return RawConsole.GetInputStream();
+  return InputStream;
 }
 
-/*
-  Get output stream
-*/
+// Set input stream
+void TConsole::SetInputStream(
+  IInputStream * InputStream
+)
+{
+  this->InputStream = InputStream;
+}
+
+// Get output stream
 IOutputStream * TConsole::GetOutputStream()
 {
-  return RawConsole.GetOutputStream();
+  return OutputStream;
+}
+
+// Set output stream
+void TConsole::SetOutputStream(
+  IOutputStream * OutputStream
+)
+{
+  this->OutputStream = OutputStream;
 }
 
 /*
@@ -50,7 +63,7 @@ void TConsole::Indent()
   if (IndentLev == MaxIndent)
     return;
 
-  ++IndentLev;
+  IndentLev = IndentLev + 1;
 }
 
 /*
@@ -63,7 +76,7 @@ void TConsole::Unindent()
   if (IndentLev == 0)
     return;
 
-  --IndentLev;
+  IndentLev = IndentLev - 1;
 }
 
 /*
@@ -87,11 +100,8 @@ void TConsole::Write(
 )
 {
   TItemType ItemType = TItemType::Chunk;
-
   PrintDelimiterBefore(ItemType);
-
-  RawConsole.SendSegment(MemSeg);
-
+  SendSegment(MemSeg);
   PrevItemType = ItemType;
 }
 
@@ -103,11 +113,8 @@ void TConsole::WriteProgmem(
 )
 {
   TItemType ItemType = TItemType::Chunk;
-
   PrintDelimiterBefore(ItemType);
-
-  RawConsole.SendProgmemSegment(ProgmemSeg);
-
+  SendProgmemSegment(ProgmemSeg);
   PrevItemType = ItemType;
 }
 
@@ -129,11 +136,8 @@ void TConsole::Write(
 )
 {
   TItemType ItemType = TItemType::Chunk;
-
   PrintDelimiterBefore(ItemType);
-
-  RawConsole.SendByte(Unit);
-
+  SendByte((TUint_1) Unit);
   PrevItemType = ItemType;
 }
 
@@ -145,10 +149,8 @@ void TConsole::Print(
 )
 {
   PrintDelimiterBefore(TItemType::Line);
-
-  RawConsole.SendSegment(AddrSeg);
-  RawConsole.SendByte('\n');
-
+  SendSegment(AddrSeg);
+  SendByte('\n');
   PrevItemType = TItemType::Nothing;
 }
 
@@ -160,10 +162,8 @@ void TConsole::PrintProgmem(
 )
 {
   PrintDelimiterBefore(TItemType::Line);
-
-  RawConsole.SendProgmemSegment(ProgmemSeg);
-  RawConsole.SendByte('\n');
-
+  SendProgmemSegment(ProgmemSeg);
+  SendByte('\n');
   PrevItemType = TItemType::Nothing;
 }
 
@@ -187,9 +187,9 @@ void TConsole::Print(
   PrintDelimiterBefore(TItemType::Number);
 
   if (IsTrue)
-    RawConsole.SendSegment(me_WorkmemTools::FromAsciiz("YES"));
+    SendSegment(me_WorkmemTools::FromAsciiz("YES"));
   else
-    RawConsole.SendSegment(me_WorkmemTools::FromAsciiz("NO"));
+    SendSegment(me_WorkmemTools::FromAsciiz("NO"));
 
   PrevItemType = TItemType::Number;
 }
@@ -209,8 +209,6 @@ void TConsole::EndLine()
 /*
   Print()'s for TUint_1, ..., TSint_4 are in "NumberPrinting.cpp".
 */
-
-// ( Freetown
 
 /*
   Print delimiter
@@ -280,9 +278,9 @@ void TConsole::PrintDelimiter(
   if (WriteNothing)
     ;
   else if (WriteSpace)
-    RawConsole.SendByte(' ');
+    SendByte(' ');
   else if (WriteNewline)
-    RawConsole.SendByte('\n');
+    SendByte('\n');
 }
 
 /*
@@ -358,8 +356,8 @@ void TConsole::PrintIndent(
     for (TUint_1 CurIndent = 0; CurIndent < IndentLev; ++CurIndent)
     {
       // Indent is two spaces
-      RawConsole.SendByte(' ');
-      RawConsole.SendByte(' ');
+      SendByte(' ');
+      SendByte(' ');
     }
   }
 }
@@ -370,7 +368,7 @@ void TConsole::PrintIndent(
 me_Console::TConsole Console;
 
 /*
-  2024-10 # # # # # #
-  2024-12 # # # # #
+  2024 # # # # # # # # # # #
   2025-09-04
+  2025-09-13
 */

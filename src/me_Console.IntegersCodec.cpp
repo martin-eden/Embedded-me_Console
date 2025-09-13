@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-12
+  Last mod.: 2025-09-13
 */
 
 #include <me_Console.h>
@@ -18,7 +18,7 @@ TBool TConsole::Read(
   TUint_1 * Uint_1
 )
 {
-  return me_ReadInteger::Read_TUint_1(Uint_1, RawConsole.GetInputStream());
+  return me_ReadInteger::Read_TUint_1(Uint_1, InputStream);
 }
 
 // Read TUint_2
@@ -26,7 +26,7 @@ TBool TConsole::Read(
   TUint_2 * Uint_2
 )
 {
-  return me_ReadInteger::Read_TUint_2(Uint_2, RawConsole.GetInputStream());
+  return me_ReadInteger::Read_TUint_2(Uint_2, InputStream);
 }
 
 // Print TUint_1
@@ -36,7 +36,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_U1(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_U1(Value, OutputStream);
   PrevItemType = ItemType;
 }
 
@@ -47,7 +47,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_U2(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_U2(Value, OutputStream);
   PrevItemType = ItemType;
 }
 
@@ -58,7 +58,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_U4(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_U4(Value, OutputStream);
   PrevItemType = ItemType;
 }
 
@@ -69,7 +69,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_S1(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_S1(Value, OutputStream);
   PrevItemType = ItemType;
 }
 
@@ -80,7 +80,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_S2(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_S2(Value, OutputStream);
   PrevItemType = ItemType;
 }
 
@@ -91,7 +91,7 @@ void TConsole::Print(
 {
   TItemType ItemType = TItemType::Number;
   PrintDelimiterBefore(ItemType);
-  me_WriteInteger::Write_S4(Value, RawConsole.GetOutputStream());
+  me_WriteInteger::Write_S4(Value, OutputStream);
   PrevItemType = ItemType;
 }
 

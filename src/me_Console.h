@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-04
+  Last mod.: 2025-09-13
 */
 
 #pragma once
@@ -23,22 +23,16 @@ namespace me_Console
       * byte (TUint_1)
       * memory segment (TAddressSegment)
   */
-  class TRawConsole
+  class TConsoleBase
   {
-    public:
-      TBool Init();
-
-      IInputStream * GetInputStream();
-      IOutputStream * GetOutputStream();
+    protected:
+      IInputStream * InputStream;
+      IOutputStream * OutputStream;
 
       TBool SendByte(TUint_1 Byte);
 
       TBool SendSegment(TAddressSegment Data);
       TBool SendProgmemSegment(TAddressSegment Data);
-
-    private:
-      me_StreamsCollection::TUartInputStream InputStream;
-      me_StreamsCollection::TUartOutputStream OutputStream;
   };
 
   /*
@@ -80,26 +74,28 @@ namespace me_Console
         Unindent
       )
   */
-  class TConsole
+  class TConsole : protected TConsoleBase
   {
     public:
       // Setup
       void Init();
 
+      // ( Assignable streams
       IInputStream * GetInputStream();
+      void SetInputStream(IInputStream *);
+
       IOutputStream * GetOutputStream();
+      void SetOutputStream(IOutputStream *);
+      // )
 
       // ( Indents!
-
       // Increase indent
       void Indent();
       // Decrease indent
       void Unindent();
-
       // )
 
       // ( Write data
-
       // Data is memory segment
       void Write(TAddressSegment Data);
       // Data is ASCIIZ pointer
@@ -108,25 +104,21 @@ namespace me_Console
       void Write(TUnit Unit);
       // Data is segment in program memory
       void WriteProgmem(TAddressSegment Data);
-
       // )
 
       // ( Print data on standalone line
-
       // Data is memory segment
       void Print(TAddressSegment Data);
       // Data is ASCIIZ pointer
       void Print(const TAsciiz Asciiz);
       // Data is segment in program memory
       void PrintProgmem(TAddressSegment Data);
-
       // )
 
       // Print newline if not on empty line
       void EndLine();
 
       // ( Custom printers for base types
-
       // TUint_1
       void Print(TUint_1 Uint_1);
       // TUint_2
@@ -141,40 +133,33 @@ namespace me_Console
       void Print(TSint_4 Sint_4);
       // TBool
       void Print(TBool Bool);
-
       // )
 
       // ( Custom readers for base types
-
       // TUint_1
       TBool Read(TUint_1 * Uint_1);
       // TUint_2
       TBool Read(TUint_2 * Uint_2);
-
       // )
 
     private:
-      /*
-        Internal mechanics to avoid double spaces and heading/trailing
-        spaces in output.
-      */
-      // Raw UART I/O
-      TRawConsole RawConsole;
+      // ( Default input and output streams
+      me_StreamsCollection::TUartInputStream UartInputStream;
+      me_StreamsCollection::TUartOutputStream UartOutputStream;
+      // )
 
-      // Last item type
+      // ( Internal mechanics to avoid double spaces and
+      //    heading/trailing spaces in output.
       TItemType PrevItemType = TItemType::Nothing;
-
-      // Indentation level
       TUint_1 IndentLev = 0;
 
       // Print delimiter
       void PrintDelimiter(TItemType CurItemType);
-
       // Print indentation
       void PrintIndent(TItemType CurItemType);
-
       // Print delimiter and maybe indent before item
       void PrintDelimiterBefore(TItemType CurItemType);
+      // )
   };
 }
 
@@ -195,4 +180,5 @@ extern me_Console::TConsole Console;
   2025-08-26
   2025-09-01
   2025-09-04
+  2025-09-13
 */
