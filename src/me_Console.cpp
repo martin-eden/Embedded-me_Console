@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-04
+  Last mod.: 2025-09-14
 */
 
 #include <me_Console.h>
@@ -189,7 +189,7 @@ void TConsole::Print(
   if (IsTrue)
     SendSegment(me_WorkmemTools::FromAsciiz("YES"));
   else
-    SendSegment(me_WorkmemTools::FromAsciiz("NO"));
+    SendSegment(me_WorkmemTools::FromAsciiz(" NO"));
 
   PrevItemType = TItemType::Number;
 }
@@ -371,4 +371,5 @@ me_Console::TConsole Console;
   2024 # # # # # # # # # # #
   2025-09-04
   2025-09-13
+  2025-09-14
 */
