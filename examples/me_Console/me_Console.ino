@@ -30,15 +30,14 @@ void TestPrints()
     at your instance destruction.
   */
 
-  Console.Print("[me_Console] demo.");
-
   Console.Print("--");
-  Console.Indent();
-
+  Console.Print("Prints demo");
+  Console.Print("");
   Console.Print("We'll show how values are represented for base types.");
   Console.Print("We'll use indentation too.");
+  Console.Print("");
 
-  Console.Print("--");
+  Console.Print("(");
   Console.Indent();
 
   {
@@ -111,28 +110,34 @@ void TestPrints()
         .Size = sizeof(ProgmemData) - 1
       };
 
-    Console.Write("Program memory ( ");
+    Console.Write("Program memory (");
     Console.WriteProgmem(ProgmemSeg);
-    Console.Write(" )");
+    Console.Write(")");
     Console.EndLine();
 
-    Console.Write("Program memory (via macro) ( ");
+    Console.Write("Program memory (via macro) (");
     Console.WriteProgmem(AsProgmemSeg("These are in program memory too"));
-    Console.Write(" )");
+    Console.Write(")");
     Console.EndLine();
   }
 
   Console.Unindent();
-  Console.Print("--");
-
-  Console.Unindent();
-  Console.Print("--");
+  Console.Print(")");
 }
 
 void TestReads()
 {
   TUint_1 Uint_1 = 0;
   TUint_2 Uint_2 = 0;
+
+  Console.Print("--");
+  Console.Print("Reading demo");
+  Console.Print("");
+  Console.Print("We'll read from input stream and try to parse to fixed type.");
+  Console.Print("");
+
+  Console.Print("(");
+  Console.Indent();
 
   Console.Print("Enter integer [0, 255]");
 
@@ -152,6 +157,9 @@ void TestReads()
   Console.Write("Got");
   Console.Print(Uint_2);
   Console.EndLine();
+
+  Console.Unindent();
+  Console.Print(")");
 }
 
 void RunTests()
@@ -164,10 +172,16 @@ void setup()
 {
   Console.Init();
 
-  Console.Print("( [me_Console] test");
+  Console.Print("--");
+  Console.Print("[me_Console] demo");
+  Console.Print("");
+  Console.Print("(");
+
+  Console.Indent();
 
   RunTests();
 
+  Console.Unindent();
   Console.Print(") Done");
 }
 
@@ -179,4 +193,5 @@ void loop()
   2024 # # # # # # #
   2025 # #
   2025-09-04
+  2025-09-19
 */
