@@ -1,40 +1,61 @@
 ## What
 
-(2024-10)
+(2024, 2025)
 
-Experimental library for serial console output.
+Serial text input/output.
+
 
 ## Details
 
-Idea is to have `Print()` for base types. For integers, for
-memory segment and for ASCIIZ. Plus traditional `Write()` for
-memory segment to do raw output.
+For me it started as experimental library and became base for all
+text output.
 
-Class provides indentation and items separation. Integers
-are separated by spaces, strings by newlines.
+You ask us to write values. You provide _what_.
+_How_ do we write and separate values is not your business.
 
-Integers are converted to strings by [`me_CodecDecInt`][me_CodecDecInt] library.
-You'd better love fixed-length representation and `+000` for
-zero in signed byte.
+We'll cure your code of "\n" and side spaces infestation.
+
+Also we have indents.
+
 
 ## Sample output
 
 ```
-[me_Console] demo.
 --
+[me_Console] demo
+
+(
+  --
+  Prints demo
+
   We'll show how values are represented for base types.
   We'll use indentation too.
-  --
-    TUint_1 ( 000 127 255 )
-    TSint_1 ( -128 +000 +127 )
-    TUint_2 ( 00000 32767 65535 )
-    TSint_2 ( -32768 +00000 +32767 )
-    TUint_4 ( 0000000000 2147483647 4294967295 )
-    TSint_4 ( -2147483648 +0000000000 +2147483647 )
-  --
---
-[me_Console] That's all folks!
 
+  (
+    TUint_1 ( 000 127 128 255 )
+    TSint_1 ( +000 +127 -128 -001 )
+    TUint_2 ( 00000 32767 32768 65535 )
+    TSint_2 ( +00000 +32767 -32768 -00001 )
+    TUint_4 ( 0000000000 2147483647 2147483648 4294967295 )
+    TSint_4 ( +0000000000 +2147483647 -2147483648 -0000000001 )
+    Program memory ( These characters are located in program memory )
+    Program memory (via macro) ( These are in program memory too )
+  )
+  --
+  Reading demo
+
+  We'll read from input stream and try to parse to fixed type.
+
+  (
+    Enter integer [0, 255]
+jh
+    Reading TUint_1 failed
+    Got 000
+    Enter integer [0, 65535]
+4589
+    Got 04589
+  )
+) Done
 ```
 
 ## Code
@@ -43,14 +64,17 @@ zero in signed byte.
 * [Interface][Interface]
 * [Implementation][Implementation]
 
+
 ## Install/remove
 
 Easy way is to clone [GetLibs][GetLibs] repo and run it's code.
+
 
 ## See also
 
 * [My other embedded C++ libraries][Embedded]
 * [My other repositories][Repos]
+
 
 [me_CodecDecInt]: https://github.com/martin-eden/Embedded-me_CodecDecInt
 
