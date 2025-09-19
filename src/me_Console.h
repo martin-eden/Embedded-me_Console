@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-13
+  Last mod.: 2025-09-19
 */
 
 #pragma once
@@ -65,8 +65,8 @@ namespace me_Console
     Supported methods:
 
       (
-        Print (prints newlines after strings, spaces after numbers)
-        Write (no newlines after strings, spaces after numbers)
+        Print (newlines after strings, spaces between other values)
+        Write (spaces between values)
         EndLine
       )
       (

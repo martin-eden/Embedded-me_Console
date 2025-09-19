@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-14
+  Last mod.: 2025-09-19
 */
 
 #include <me_Console.h>
@@ -217,7 +217,7 @@ void TConsole::EndLine()
 
    Next > | Chunk Line Number Nothing
   --Prev--+----------------------------
-  Chunk   | ""    \n   " "    ""
+  Chunk   | " "   \n   " "    ""
   Line    | \n    \n   \n     \n
   Number  | " "   \n   " "    ""
   Nothing | ""    ""   ""     ""
@@ -233,7 +233,7 @@ void TConsole::PrintDelimiter(
   if (PrevItemType == Chunk)
   {
     if (CurItemType == Chunk)
-      WriteNothing = true;
+      WriteSpace = true;
     else if (CurItemType == Line)
       WriteNewline = true;
     else if (CurItemType == Number)
@@ -372,4 +372,5 @@ me_Console::TConsole Console;
   2025-09-04
   2025-09-13
   2025-09-14
+  2025-09-19
 */
