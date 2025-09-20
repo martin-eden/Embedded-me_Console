@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-19
+  Last mod.: 2025-09-20
 */
 
 #include <me_Console.h>
@@ -10,6 +10,8 @@
 #include <me_BaseTypes.h>
 #include <me_WorkmemTools.h>
 #include <me_StreamsCollection.h>
+#include <me_StreamTokenizer.h>
+#include <me_WorkmemTools.h>
 
 using namespace me_Console;
 
@@ -194,6 +196,42 @@ void TConsole::Print(
   PrevItemType = TItemType::Number;
 }
 
+/*
+  Read boolean value
+*/
+TBool TConsole::Read(
+  TBool * Bool
+)
+{
+  const TAddressSegment
+    TrueValue = me_WorkmemTools::FromAsciiz("YES"),
+    FalseValue = me_WorkmemTools::FromAsciiz("NO");
+
+  const TUint_1 BufferSize = 5;
+  TUint_1 Buffer[BufferSize];
+  TAddressSegment BuffSeg;
+  me_StreamsCollection::TWorkmemOutputStream BuffStream;
+  TAddressSegment DataSeg;
+
+  BuffSeg = { .Addr = (TAddress) &Buffer, .Size = BufferSize };
+
+  BuffStream.Init(BuffSeg);
+
+  if (!me_StreamTokenizer::GetEntity(&BuffStream, InputStream))
+    return false;
+
+  DataSeg = BuffStream.GetProcessedSegment();
+
+  if (me_WorkmemTools::AreEqual(DataSeg, TrueValue))
+    *Bool = true;
+  else if (me_WorkmemTools::AreEqual(DataSeg, FalseValue))
+    *Bool = false;
+  else
+    return false;
+
+  return true;
+}
+
 
 // Printers for integers are in separate file
 
@@ -373,4 +411,5 @@ me_Console::TConsole Console;
   2025-09-13
   2025-09-14
   2025-09-19
+  2025-09-20
 */

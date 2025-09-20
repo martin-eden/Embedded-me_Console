@@ -129,6 +129,7 @@ void TestReads()
 {
   TUint_1 Uint_1 = 0;
   TUint_2 Uint_2 = 0;
+  TBool Bool = false;
 
   Console.Print("--");
   Console.Print("Reading demo");
@@ -148,7 +149,6 @@ void TestReads()
   Console.Print(Uint_1);
   Console.EndLine();
 
-
   Console.Print("Enter integer [0, 65535]");
 
   if (!Console.Read(&Uint_2))
@@ -156,6 +156,15 @@ void TestReads()
 
   Console.Write("Got");
   Console.Print(Uint_2);
+  Console.EndLine();
+
+  Console.Print("Enter boolean ( YES NO )");
+
+  if (!Console.Read(&Bool))
+    Console.Print("Reading TBool failed");
+
+  Console.Write("Got");
+  Console.Print(Bool);
   Console.EndLine();
 
   Console.Unindent();

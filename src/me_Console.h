@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-19
+  Last mod.: 2025-09-20
 */
 
 #pragma once
@@ -140,6 +140,8 @@ namespace me_Console
       TBool Read(TUint_1 * Uint_1);
       // TUint_2
       TBool Read(TUint_2 * Uint_2);
+      // TBool
+      TBool Read(TBool * Bool);
       // )
 
     private:
@@ -181,4 +183,5 @@ extern me_Console::TConsole Console;
   2025-09-01
   2025-09-04
   2025-09-13
+  2025-09-20 TBool reading
 */
