@@ -2,15 +2,12 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-20
+  Last mod.: 2025-09-23
 */
 
 #include <me_Console.h>
 
 #include <me_BaseTypes.h>
-#include <me_WorkmemTools.h>
-#include <me_StreamsCollection.h>
-#include <me_StreamTokenizer.h>
 #include <me_WorkmemTools.h>
 
 using namespace me_Console;
@@ -178,60 +175,6 @@ void TConsole::Print(
 {
   Print(me_WorkmemTools::FromAsciiz(Asciiz));
 }
-
-/*
-  Print boolean value
-*/
-void TConsole::Print(
-  TBool IsTrue
-)
-{
-  PrintDelimiterBefore(TItemType::Number);
-
-  if (IsTrue)
-    SendSegment(me_WorkmemTools::FromAsciiz("YES"));
-  else
-    SendSegment(me_WorkmemTools::FromAsciiz(" NO"));
-
-  PrevItemType = TItemType::Number;
-}
-
-/*
-  Read boolean value
-*/
-TBool TConsole::Read(
-  TBool * Bool
-)
-{
-  const TAddressSegment
-    TrueValue = me_WorkmemTools::FromAsciiz("YES"),
-    FalseValue = me_WorkmemTools::FromAsciiz("NO");
-
-  const TUint_1 BufferSize = 5;
-  TUint_1 Buffer[BufferSize];
-  TAddressSegment BuffSeg;
-  me_StreamsCollection::TWorkmemOutputStream BuffStream;
-  TAddressSegment DataSeg;
-
-  BuffSeg = { .Addr = (TAddress) &Buffer, .Size = BufferSize };
-
-  BuffStream.Init(BuffSeg);
-
-  if (!me_StreamTokenizer::GetEntity(&BuffStream, InputStream))
-    return false;
-
-  DataSeg = BuffStream.GetProcessedSegment();
-
-  if (me_WorkmemTools::AreEqual(DataSeg, TrueValue))
-    *Bool = true;
-  else if (me_WorkmemTools::AreEqual(DataSeg, FalseValue))
-    *Bool = false;
-  else
-    return false;
-
-  return true;
-}
-
 
 // Printers for integers are in separate file
 
