@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-13
+  Last mod.: 2025-10-14
 */
 
 /*
@@ -46,7 +46,7 @@ TBool TConsoleBase::SendSegment(
   if (!MemsegStream.Init(MemSeg))
     return false;
 
-  return me_StreamTools::CopyStreamTo(&MemsegStream, OutputStream);
+  return me_StreamTools::SaveStreamTo(&MemsegStream, OutputStream);
 }
 
 /*
@@ -61,7 +61,7 @@ TBool TConsoleBase::SendProgmemSegment(
   if (!ProgmemStream.Init(ProgmemSeg))
     return false;
 
-  return me_StreamTools::CopyStreamTo(&ProgmemStream, OutputStream);
+  return me_StreamTools::SaveStreamTo(&ProgmemStream, OutputStream);
 }
 
 /*
