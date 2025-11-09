@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-09-04
+  Last mod.: 2025-11-09
 */
 
 #include <me_Console.h>
@@ -96,6 +96,14 @@ void TestPrints()
     Console.Print((TSint_4) 0x7FFFFFFF);
     Console.Print((TSint_4) 0x80000000);
     Console.Print((TSint_4) 0xFFFFFFFF);
+    Console.Write(")");
+    Console.EndLine();
+  }
+
+  {
+    Console.Write("TBool (");
+    Console.Print(true);
+    Console.Print(false);
     Console.Write(")");
     Console.EndLine();
   }
