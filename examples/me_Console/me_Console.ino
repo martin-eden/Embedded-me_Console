@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-09
+  Last mod.: 2025-12-08
 */
 
 #include <me_Console.h>
@@ -166,7 +166,7 @@ void TestReads()
   Console.Print(Uint_2);
   Console.EndLine();
 
-  Console.Print("Enter boolean ( YES NO )");
+  Console.Print("Enter boolean ( Y N )");
 
   if (!Console.Read(&Bool))
     Console.Print("Reading TBool failed");
