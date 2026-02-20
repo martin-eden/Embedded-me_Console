@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-12-08
+  Last mod.: 2026-02-20
 */
 
 #include <me_Console.h>
@@ -124,7 +124,7 @@ void TestPrints()
     Console.EndLine();
 
     Console.Write("Program memory (via macro) (");
-    Console.WriteProgmem(AsProgmemSeg("These are in program memory too"));
+    Console.WriteProgmem(M_AsProgmemSeg("These are in program memory too"));
     Console.Write(")");
     Console.EndLine();
   }
